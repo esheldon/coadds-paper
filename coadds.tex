@@ -1,0 +1,176 @@
+%\documentclass[usegraphicx,usenatbib]{mn2e}
+%\documentclass[a4paper,fleqn,usenatbib]{mnras}
+\documentclass[a4paper,fleqn,usenatbib,referee]{mnras}
+%\documentclass[useAMS,usegraphicx,usenatbib]{mn2e}
+
+\usepackage{verbatim}
+\usepackage{color}
+\usepackage[normalem]{ulem} % for striking out with \sout
+\usepackage{amsmath} % for boldsymbol
+\usepackage{times}
+\input{newcommands.tex}
+
+\def\eps@scaling{1.0}% 
+
+\newcommand{\sn}{$S/N$}
+\newcommand{\Msn}{$(S/N)_{\textrm{matched}}$}
+\newcommand{\Tsn}{$(S/N)_{\textrm{size}}$}
+\newcommand{\fsn}{$(S/N)_{\textrm{flux}}$}
+
+% stolen from the BA14 source
+\newcommand{\vecg}{\mbox{\boldmath $g$}}
+\newcommand{\vecD}{\mbox{\boldmath $D$}}
+\newcommand{\vecQ}{\mbox{\boldmath $Q$}}
+\newcommand{\matR}{\mbox{$\bf R$}}
+\newcommand{\matC}{\mbox{$\bf C$}}
+\newcommand{\bnabg}{ \boldsymbol{\nabla_g}}
+
+\newcommand{\desreq}{$4\times 10^{-3}$}
+\newcommand{\lsstreq}{$2\times 10^{-3}$}
+
+\newcommand{\lognormscatt}{30}
+
+%\newcommand{\mnras}{MNRAS}%
+%\newcommand{\apj}{ApJ}%
+%\newcommand{\aj}{AJ}%
+%\newcommand{\pasp}{PASP}%
+%\newcommand{\jcp}{J.~Chem.~Phys.}
+
+
+%\newcommand{\apjs}{"Astrophys. J., Suppl. Ser."}
+
+%\slugcomment{Last revision \today}
+%\shortauthors{Sheldon}
+%\shorttitle{Bayesian Shear Estimation}
+
+
+\title{The Little Coadd that Could\\
+or\\
+When to Coadd}
+
+
+\author[E. Sheldon, B. Armstrong, E. Huff]{E. Sheldon, B. Armstrong, E. Huff}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+    Abstract
+
+\end{abstract}
+
+
+\begin{keywords}                                                                    
+    cosmology: observations,
+    gravitational lensing: weak,
+    dark energy
+\end{keywords} 
+
+\section{Toy Example} \label{sec:intro}
+
+Here we estimate the additional uncertainty in the measured flux when coadding,
+for the example of ``matched-filter'' photometry.  A key to this derivation is
+the assumption that the variation in PSF sizes is small relative to the mean
+PSF size.  We will also assume that the PSF and object are round Gaussians,
+which makes the math tractable.
+
+First, let's consider an optimal estimator for a single unknown parameter that
+is linear in the observables. Let the model $\boldsymbol{M}$ be $\boldsymbol{M}
+= A\boldsymbol{m}$, where $A$ is a scalar amplitude and $\boldsymbol{m}$ is a
+normalized signal model, or template. Then the log-likelihood for $A$ (assuming
+a Gaussian signal likelihood) and some data vector $\boldsymbol{d}$ is
+\begin{align}
+  \log L = - (\boldsymbol{d} - A\boldsymbol{m})^T\: C^{-1} (\boldsymbol{d} - A\boldsymbol{m}) - \frac{1}{2} \det(2\pi C )
+\end{align}
+where $C$ is the noise covariance. The optimal estimator $\hat{A}$ is the value
+that maximizes this expression for $A$. With some algebra, it can be shown that
+this value is:
+\begin{align}
+\hat{A} = \frac{\boldsymbol{m} C^{-1} \boldsymbol{d}}{\boldsymbol{m} C^{-1} \boldsymbol{m}}
+\end{align}
+and that the variance of $\hat{A}$ is
+\begin{align}
+{\rm var}\hat{A} = \frac{1}{{\boldsymbol{m} C^{-1} \boldsymbol{m}}}
+\end{align}
+
+In the case of photometry, $\boldsymbol{m}$ is the normalized profile of the
+star or galaxy, $A$ is the measured flux, and $\boldsymbol{d}$ is the set of
+pixels on which the measurement will be made.
+
+For a set of $n$ images of the same sky, the data is the concatenation of the
+pixel values in each epoch, i.e., $\boldsymbol{d} = \{d_0, d_1, ..., d_n \}$.
+This allows the template $\boldsymbol{m}$ to be the concatentation of the
+templates appropriate for each epoch, if for instance the PSF varies from
+exposure to exposure.
+
+Now suppose we coadd the images, such that $\boldsymbol{d}_{\rm c} = \frac{1}{N}\sum\limits_i
+d_i$, and the covariance matrix is $C_c^{-1} = \sum\limits_i C_i^{-1}$.
+The template $\boldsymbol{m}_{\rm c}$ is then the mean $\langle
+\boldsymbol{m}_i\rangle$, and the resulting operation is:
+\begin{align}
+    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{d}_c}{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{m}_{\rm c}} = \frac{\frac{1}{N}\sum\limits_i \boldsymbol{m}_{\rm c} C_c^{-1}  \boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_{\rm c} C_i^{-1}\boldsymbol{m}_{\rm c}},
+\end{align}
+with estimator variance
+\begin{align} \label{eq:coaddvarest}
+{\rm var}\hat{A}_{\rm c} = \frac{1}{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{m}_{\rm c}},
+\end{align}
+where the indices in these expressions run over epochs. The multi-fitting
+method, by contrast, would use the optimal estimator for each epoch:
+\begin{align}
+\hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i C_i^{-1}\boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_i C_i^{-1}\boldsymbol{m}_i}
+\end{align}
+with estimator variance
+\begin{align}
+{\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i C_i^{-1}\boldsymbol{m}_i}.
+\end{align}
+
+We can re-write the data for each image as:
+\begin{align}
+    \boldsymbol{d}_{\rm i} &= A \boldsymbol{m}_i + \boldsymbol{\epsilon}_i\\
+    &= A \boldsymbol{m_c} + A \Delta\boldsymbol{ m}_i + \boldsymbol{\epsilon}_i
+\end{align}
+where $\boldsymbol{\epsilon}_i$ is the pixel noise and, by definition,
+$\langle\Delta\boldsymbol{m}_i\rangle= 0$. The expression for the coadd
+estimator then becomes:
+\begin{align}
+    \hat{A} &= A + A \frac{\boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
+              + \frac{\boldsymbol{m}_c C_c^{-1} \langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}.
+\end{align}
+The second and third terms average to zero, showing the estimator is unbiased.  We can
+now calculate the variance of this estimator
+\begin{align}
+    {\rm var}\hat{A} &= \langle (A - \hat{A})^2 \rangle \\
+                     &= \Bigl< \left(A \frac{\boldsymbol{m}_c C_c^{-1}\langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
+              + \frac{\boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)^2 \Bigr> \\
+                     &=( {\rm var}\hat{A_c})^2 \Bigl< \Bigl( A \boldsymbol{m}_c C_c^{-1}\langle \Delta \boldsymbol{m} \rangle
+              + \boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon}\rangle \Bigr)^2 \Bigr>,
+\end{align}
+Where we factored out the coadd variance estimator.
+We can ignore the cross-terms from the square, which will average to zero:
+\begin{align*} 
+    {\rm var}\hat{A} = ({\rm var}\hat{A_c})^2 \Bigl[ A^2 (\boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \rangle )(\boldsymbol{m}_c C_c^{-1}\langle \Delta \boldsymbol{m} \rangle )^T 
+     + (\boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon} \rangle) (\boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon} \rangle)^T \Bigr]
+\end{align*}
+This can be rearranged using the rules of transposition
+\begin{align*}
+    {\rm var}\hat{A} = ({\rm var}\hat{A_c})^2 [& A^2 \boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T\rangle C_c^{-1} \boldsymbol{m}_c^T \\
+    & + \boldsymbol{m}_c C_c^{-1} \langle \boldsymbol{\epsilon} \boldsymbol{\epsilon}^T \rangle C_c^{-1} \boldsymbol{m}_c^T ].
+\end{align*}
+The term $\langle \boldsymbol{\epsilon} \boldsymbol{\epsilon}^T \rangle$ is in fact the
+same as the covariance matrix.  After cancellation we have
+\begin{align*}
+    {\rm var}\hat{A} = {\rm var}\hat{A_c} \Bigl[ 1 + \frac{A^2 \boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T\rangle C_c^{-1} \boldsymbol{m}_c^T}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}  \Bigr]
+\end{align*}
+We thus see that the true variance is larger than that estimated using
+equation \ref{eq:coaddvarest}.
+
+We now depart from generality in order to 
+
+%\bibliographystyle{mn2e}
+% Bib database
+%\bibliography{apj-jour,astroref}
+
+\end{document}
+
