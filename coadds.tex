@@ -12,6 +12,7 @@
 
 \def\eps@scaling{1.0}% 
 
+\newcommand{\snr}{$S/N$}
 \newcommand{\sn}{$S/N$}
 \newcommand{\Msn}{$(S/N)_{\textrm{matched}}$}
 \newcommand{\Tsn}{$(S/N)_{\textrm{size}}$}
@@ -88,11 +89,11 @@ where $C$ is the noise covariance. The optimal estimator $\hat{A}$ is the value
 that maximizes this expression for $A$. With some algebra, it can be shown that
 this value is:
 \begin{align}
-\hat{A} = \frac{\boldsymbol{m} C^{-1} \boldsymbol{d}}{\boldsymbol{m} C^{-1} \boldsymbol{m}}
+\hat{A} = \frac{\boldsymbol{m}^T C^{-1} \boldsymbol{d}}{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}
 \end{align}
 and that the variance of $\hat{A}$ is
 \begin{align}
-{\rm var}\hat{A} = \frac{1}{{\boldsymbol{m} C^{-1} \boldsymbol{m}}}
+{\rm var}\hat{A} = \frac{1}{{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}}
 \end{align}
 
 In the case of photometry, $\boldsymbol{m}$ is the normalized profile of the
@@ -105,12 +106,12 @@ This allows the template $\boldsymbol{m}$ to be the concatentation of the
 templates appropriate for each epoch, if for instance the PSF varies from
 exposure to exposure.
 
-Now suppose we coadd the images, such that $\boldsymbol{d}_{\rm c} = \frac{1}{N}\sum\limits_i
+Now suppose we coadd the images, such that $\langle \boldsymbol{d} \rangle = \frac{1}{N}\sum\limits_i
 d_i$, and the covariance matrix is $C_c^{-1} = \sum\limits_i C_i^{-1}$.
 The template $\boldsymbol{m}_{\rm c}$ is then the mean $\langle
 \boldsymbol{m}_i\rangle$, and the resulting operation is:
 \begin{align}
-    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{d}_c}{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{m}_{\rm c}} = \frac{\frac{1}{N}\sum\limits_i \boldsymbol{m}_{\rm c} C_c^{-1}  \boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_{\rm c} C_i^{-1}\boldsymbol{m}_{\rm c}},
+    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c} C_c^{-1} \langle d \rangle}{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{m}_{\rm c}} 
 \end{align}
 with estimator variance
 \begin{align} \label{eq:coaddvarest}
@@ -138,35 +139,93 @@ estimator then becomes:
     \hat{A} &= A + A \frac{\boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
               + \frac{\boldsymbol{m}_c C_c^{-1} \langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}.
 \end{align}
-The second and third terms average to zero, showing the estimator is unbiased.  We can
-now calculate the variance of this estimator
+The second and third terms average to zero, showing the estimator is unbiased.  However,
+there is additional variance due to the $\langle\Delta\boldsymbol{m}_i\rangle$ term. We can
+calculate the actual variance of this estimator
 \begin{align}
-    {\rm var}\hat{A} &= \langle (A - \hat{A})^2 \rangle \\
-                     &= \Bigl< \left(A \frac{\boldsymbol{m}_c C_c^{-1}\langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
-              + \frac{\boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)^2 \Bigr> \\
-                     &=( {\rm var}\hat{A_c})^2 \Bigl< \Bigl( A \boldsymbol{m}_c C_c^{-1}\langle \Delta \boldsymbol{m} \rangle
-              + \boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon}\rangle \Bigr)^2 \Bigr>,
+    {\rm var}\hat{A} &= \frac{1}{N}\Bigl< \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
+              + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)
+              \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
+              + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)^T \Bigr>
 \end{align}
-Where we factored out the coadd variance estimator.
-We can ignore the cross-terms from the square, which will average to zero:
-\begin{align*} 
-    {\rm var}\hat{A} = ({\rm var}\hat{A_c})^2 \Bigl[ A^2 (\boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \rangle )(\boldsymbol{m}_c C_c^{-1}\langle \Delta \boldsymbol{m} \rangle )^T 
-     + (\boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon} \rangle) (\boldsymbol{m}_c C_c^{-1}\langle \boldsymbol{\epsilon} \rangle)^T \Bigr]
-\end{align*}
-This can be rearranged using the rules of transposition
-\begin{align*}
-    {\rm var}\hat{A} = ({\rm var}\hat{A_c})^2 [& A^2 \boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T\rangle C_c^{-1} \boldsymbol{m}_c^T \\
-    & + \boldsymbol{m}_c C_c^{-1} \langle \boldsymbol{\epsilon} \boldsymbol{\epsilon}^T \rangle C_c^{-1} \boldsymbol{m}_c^T ].
-\end{align*}
-The term $\langle \boldsymbol{\epsilon} \boldsymbol{\epsilon}^T \rangle$ is in fact the
-same as the covariance matrix.  After cancellation we have
-\begin{align*}
-    {\rm var}\hat{A} = {\rm var}\hat{A_c} \Bigl[ 1 + \frac{A^2 \boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T\rangle C_c^{-1} \boldsymbol{m}_c^T}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}  \Bigr]
-\end{align*}
+The cross-terms will vanish in the average, and the term involving $\boldsymbol
+\epsilon$ results in the standard variance estimate given in equation
+\ref{eq:coaddvarest}. Thus the full variance is
+\begin{align} 
+    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
+        \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} \Bigl< \left(\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m} \right)  \left(\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m} \right)^T \Bigr> \Bigr] \\
+        &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} \Bigl< \boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T  C_c^{-1} \boldsymbol{m}_c^T  \Bigr> \Bigr]
+\end{align}
+where we have used the rules of transposition and the fact that the covariance matrix is symmetric.
+The only statistical quantities in this equation are the $\Delta \boldsymbol{m}$, so we can bring
+the averages in
+\begin{align}
+    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} \boldsymbol{m}_c C_c^{-1} \Bigl< \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T \Bigr>  C_c^{-1} \boldsymbol{m}_c^T  \Bigr]
+\end{align}
 We thus see that the true variance is larger than that estimated using
 equation \ref{eq:coaddvarest}.
 
-We now depart from generality in order to 
+We now depart from generality in order to simplify the calculations.  We assume
+the noise for all images has the same value $\eta$. We further assume that the covariance
+matrix is diagonal; this assumption will break down in true coadds due to
+interpolation.  We further assume that the $\Delta \boldsymbol{m}$ are small,
+and due to a simple variation of the scale $\sigma$ of the image
+\begin{align}
+    \Delta \boldsymbol{m} = \frac{\partial \boldsymbol{m}}{\partial \sigma} \Delta \sigma
+\end{align}
+The variance can then be written
+\begin{align}
+    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
+        \frac{1}{N}\frac{A^2}{\eta^2} \frac{\Delta \sigma^2}{\boldsymbol{m}_c \boldsymbol{m}_c^T} \boldsymbol{m}_c  \Bigl< \frac{\partial \boldsymbol{m}}{\partial \sigma} \frac{\partial \boldsymbol{m}}{\partial \sigma}^T \Bigr>   \boldsymbol{m}_c^T  \Bigr]
+\end{align}
+We will also assume the images are round gaussians with size $\sigma$, such that
+\begin{align}
+    \boldsymbol{m} = \frac{1}{2 \pi \sigma^2} e^{-r^2/2 \sigma^2 }
+\end{align}
+For this model, the derivatives can be calculated directly
+\begin{align}
+    \frac{\partial \boldsymbol{m}}{\partial \sigma} &= \frac{1}{2 \pi \sigma^2} \frac{2}{\sigma} e^{r^2/2 \sigma^2} \Bigl( \frac{1}{2}\frac{r^2}{\sigma^2} - 1 \Bigr) \\
+    &\equiv \frac{1}{2 \pi \sigma^2} \frac{2}{\sigma} \boldsymbol{F}
+\end{align}
+We can also calculate $\boldsymbol{m}^T \boldsymbol{m} = 1/4 \pi \sigma^2$. We
+can now rewrite the variance as
+\begin{align}
+    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
+        \frac{16}{N}\frac{A^2}{4 \pi \sigma^2 \eta^2} \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \boldsymbol{m}_c^T  \Bigl< \boldsymbol{F}^T \boldsymbol{F} \Bigr> \boldsymbol{m} \Bigr]
+\end{align}
+The term $A^2/4 \pi \sigma^2 \eta^2$ is equal to the square of 
+the native signal-to-noise
+ratio of the coadd measurement based on the variance in equation \ref{eq:coaddvarest}.
+Additional, the quantity $\boldsymbol{m}_c^T  \Bigl< \boldsymbol{F}^T \boldsymbol{F} \Bigr> \boldsymbol{m}$
+is identically equal to the value $1/16$.  Thus our final estimate of the variance is
+\begin{align} \label{eq:varbasic}
+    {\rm var}\hat{A} = {\rm var}\hat{A_c} \Bigl[ 1 + 
+        \frac{1}{N} \left( \frac{S}{N} \right)^2 \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \Bigr]
+\end{align}
+
+We see that the additional variance due to PSF size variations is important
+at relatively high \snr.  For example, if the fractional variation of
+the size is 10\%, and there are 10 images used for the coadd process,
+the additioinal uncertainty, the square root of the variance,
+is 10\% at \snr=15.
+
+We may expect the increase in variance to be less for galaxies that
+are larger than the PSF.  If the galaxy is a Gaussian with
+size $\sigma_g$ and the PSF is Gaussian with size $\sigma_p$,
+and that there are small variations in the PSF size,
+we can use the chain rule to rewrite equation \ref{eq:varbasic} as
+\begin{align} \label{eq:vargal}
+    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
+        \frac{1}{N} \left( \frac{S}{N} \right)^2 \Bigl(\frac{\sigma_p^2}{\sigma_p^2 + \sigma_g^2} \Bigr)^2 \Bigl( \frac{\Delta \sigma_p}{\sigma_p} \Bigr)^2 \Bigr] \\
+     &= {\rm var}\hat{A_c} \Bigl[ 1 + 
+        \frac{1}{N} \left( \frac{S}{N} \right)^2 \Bigl(1 - R \Bigr)^2 \Bigl( \frac{\Delta \sigma_p}{\sigma_p} \Bigr)^2 \Bigr],
+\end{align}
+where we have used the definition of the resolution factor $R =
+\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$.  This confirms our
+intuition that large galaxies, with $R \sim 1$ will suffer
+a small increase in variance.
+
+
 
 %\bibliographystyle{mn2e}
 % Bib database
