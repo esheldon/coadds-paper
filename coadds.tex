@@ -252,17 +252,16 @@ are the measurement of
     \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A_c}} },
 \end{align}
 in other words, the increase in uncertainty over the
-naive estimator.  The filled circles show
+naive estimator.  The filled circles show the increased
+uncertainty relative to the {\em measured} uncertainty using
+the optimal multi-epoch estimator.
 \begin{align}
-    \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A}_{\rm multi} } },
+    \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A}^{\rm meas}_{\rm multi} } },
 \end{align}
-or the increase in uncertainty relative to the optimal, multi-epoch
-estimator.  In all cases these two ratios are quite similar.  Overplotted
+Where the "meas" superscript indicates this is measured, not
+calculated from the variance estimator.
+Overplotted
 as lines are the predicted values from equation \ref{eq:vargal}.
-
-We see that for stars and small galaxies with with $R \sim 0$, there is a 20\%
-increase in at \snr$\sim 20$.  But for large and relatively low \snr\ galaxies
-the increase in variance can be relatively minor even at \snr=60.
 
 \begin{figure}
     \centering
@@ -278,6 +277,16 @@ the increase in variance can be relatively minor even at \snr=60.
 
 \end{figure}
 
+
+We see that for stars and small galaxies with with $R \sim 0$, there is a 20\%
+increase in at \snr$\sim 20$.  But for large and relatively low \snr\ galaxies
+the increase in variance can be relatively minor even at \snr=60.
+
+Note also that, in the monte-carlo, we assumed the coadd was a Gaussian, which
+is not quite correct.  This explains why the unfilled symbols, based on the
+naive analytic coadd variance prediction, are slightly lower than the filled
+circles from the measured variance of the optimal estimator:  there is some
+additional variance due to using a slightly wrong template.
 
 
 %\citep{GALSIM2015}
