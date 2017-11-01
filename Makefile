@@ -13,6 +13,7 @@ pdf:
 clean:
 	rm -f \
 	${texfile}.dvi \
+	${texfile}.out \
 	${texfile}.ps \
 	${texfile}.pdf \
 	${texfile}.aux \
