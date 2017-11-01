@@ -12,6 +12,9 @@
 
 \def\eps@scaling{1.0}% 
 
+\newcommand{\galsim}{\texttt{GALSIM}}
+\newcommand{\ngmix}{\texttt{ngmix}}
+
 \newcommand{\snr}{$S/N$}
 \newcommand{\sn}{$S/N$}
 \newcommand{\Msn}{$(S/N)_{\textrm{matched}}$}
@@ -69,7 +72,7 @@ When to Coadd}
     dark energy
 \end{keywords} 
 
-\section{Toy Example} \label{sec:intro}
+\section{Toy Example} \label{sec:toy}
 
 Here we estimate the additional uncertainty in the measured flux when coadding,
 for the example of ``matched-filter'' photometry.  A key to this derivation is
@@ -225,7 +228,16 @@ where we have used the definition of the resolution factor $R =
 intuition that large galaxies, with $R \sim 1$ will suffer
 a small increase in variance.
 
+\subsection{Monte-carlo Tests of the Toy Example} \label{sec:toymc}
 
+We tested the results of section \ref{sec:toy} using a simple monte carlo.  We
+used \galsim\ to generate image of Gaussian galaxies convolved by Gaussian
+PSFs, and we used the \ngmix\ package
+\footnote{\url{https://github.com/esheldon/ngmix}} to fit the template flux.
+
+We varied the PSF size by 
+
+%\citep{GALSIM2015}
 
 %\bibliographystyle{mn2e}
 % Bib database
