@@ -246,16 +246,33 @@ galaxy size relative to the PSF, or equivalently resolution $R$.  We varied the
 size of the galaxy from zero, or star-like, to more than twice the PSF size,
 such that$R = 0.83$. We varied the the \snr\ from $\sim 6$ to $\sim 60$.
 
-The results are shown in figure \ref{fig:mcresults}.  We see that for stars and
-small galaxies with with $R \sim 0$, there is a 20\% increase in at \snr$\sim
-20$.  But for large and relatively low \snr\ galaxies the increase in variance
-can be relatively minor even at \snr=60.
+The results are shown in figure \ref{fig:mcresults}.  The unfilled symbols
+are the measurement of
+\begin{align}
+    \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A_c}} },
+\end{align}
+in other words, the increase in uncertainty over the
+naive estimator.  The filled circles show
+\begin{align}
+    \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A}_{\rm multi} } },
+\end{align}
+or the increase in uncertainty relative to the optimal, multi-epoch
+estimator.  In all cases these two ratios are quite similar.  Overplotted
+as lines are the predicted values from equation \ref{eq:vargal}.
+
+We see that for stars and small galaxies with with $R \sim 0$, there is a 20\%
+increase in at \snr$\sim 20$.  But for large and relatively low \snr\ galaxies
+the increase in variance can be relatively minor even at \snr=60.
 
 \begin{figure}
     \centering
     \includegraphics[]{{cnoise-fwhm0.90-frac0.10-ntrial100000}.pdf}
 
-    \caption{blah}
+    \caption{Measured and predicted values for the increased
+    uncertainty due to coaddition, for the toy Gaussian model
+    presented in section \ref{sec:toy}.  The points are
+    two different measures of the increased uncertainty (see \S \ref{sec:toymc})
+    and the lines are the prediction.}
 
 	\label{fig:mcresults}
 
