@@ -3,6 +3,7 @@
 \documentclass[a4paper,fleqn,usenatbib,referee]{mnras}
 %\documentclass[useAMS,usegraphicx,usenatbib]{mn2e}
 
+\usepackage{graphicx}
 \usepackage{verbatim}
 \usepackage{color}
 \usepackage[normalem]{ulem} % for striking out with \sout
@@ -114,20 +115,20 @@ d_i$, and the covariance matrix is $C_c^{-1} = \sum\limits_i C_i^{-1}$.
 The template $\boldsymbol{m}_{\rm c}$ is then the mean $\langle
 \boldsymbol{m}_i\rangle$, and the resulting operation is:
 \begin{align}
-    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c} C_c^{-1} \langle d \rangle}{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{m}_{\rm c}} 
+    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c}^T C_c^{-1} \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_{\rm c}^t C_c^{-1}\boldsymbol{m}_{\rm c}} 
 \end{align}
 with estimator variance
 \begin{align} \label{eq:coaddvarest}
-{\rm var}\hat{A}_{\rm c} = \frac{1}{\boldsymbol{m}_{\rm c} C_c^{-1}\boldsymbol{m}_{\rm c}},
+{\rm var}\hat{A}_{\rm c} = \frac{1}{\boldsymbol{m}_{\rm c}^T C_c^{-1}\boldsymbol{m}_{\rm c}},
 \end{align}
 where the indices in these expressions run over epochs. The multi-fitting
 method, by contrast, would use the optimal estimator for each epoch:
 \begin{align}
-\hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i C_i^{-1}\boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_i C_i^{-1}\boldsymbol{m}_i}
+\hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}
 \end{align}
 with estimator variance
 \begin{align}
-{\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i C_i^{-1}\boldsymbol{m}_i}.
+{\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}.
 \end{align}
 
 We can re-write the data for each image as:
@@ -139,8 +140,8 @@ where $\boldsymbol{\epsilon}_i$ is the pixel noise and, by definition,
 $\langle\Delta\boldsymbol{m}_i\rangle= 0$. The expression for the coadd
 estimator then becomes:
 \begin{align}
-    \hat{A} &= A + A \frac{\boldsymbol{m}_c C_c^{-1} \langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
-              + \frac{\boldsymbol{m}_c C_c^{-1} \langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}.
+    \hat{A} &= A + A \frac{\boldsymbol{m}_c^T C_c^{-1} \langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} 
+              + \frac{\boldsymbol{m}_c^T C_c^{-1} \langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c}.
 \end{align}
 The second and third terms average to zero, showing the estimator is unbiased.  However,
 there is additional variance due to the $\langle\Delta\boldsymbol{m}_i\rangle$ term. We can
@@ -156,30 +157,29 @@ The cross-terms will vanish in the average, and the term involving $\boldsymbol
 \ref{eq:coaddvarest}. Thus the full variance is
 \begin{align} 
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} \Bigl< \left(\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m} \right)  \left(\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m} \right)^T \Bigr> \Bigr] \\
-        &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} \Bigl< \boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T  C_c^{-1} \boldsymbol{m}_c^T  \Bigr> \Bigr]
+        \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \Bigl< \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)  \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)^T \Bigr> \Bigr] \\
+        &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \Bigl< \boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T  C_c^{-1} \boldsymbol{m}_c  \Bigr> \Bigr]
 \end{align}
 where we have used the rules of transposition and the fact that the covariance matrix is symmetric.
 The only statistical quantities in this equation are the $\Delta \boldsymbol{m}$, so we can bring
 the averages in
 \begin{align}
-    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} \boldsymbol{m}_c C_c^{-1} \Bigl< \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T \Bigr>  C_c^{-1} \boldsymbol{m}_c^T  \Bigr]
+    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \boldsymbol{m}_c^T C_c^{-1} \Bigl< \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T \Bigr>  C_c^{-1} \boldsymbol{m}_c  \Bigr]
 \end{align}
-We thus see that the true variance is larger than that estimated using
-equation \ref{eq:coaddvarest}.
 
 We now depart from generality in order to simplify the calculations.  We assume
 the noise for all images has the same value $\eta$. We further assume that the covariance
 matrix is diagonal; this assumption will break down in true coadds due to
-interpolation.  We further assume that the $\Delta \boldsymbol{m}$ are small,
-and due to a simple variation of the scale $\sigma$ of the image
+interpolation.  We further assume that the $\Delta \boldsymbol{m}_i$ are small,
+and that the variations are due to the variation of the object
+scale $\sigma$
 \begin{align}
     \Delta \boldsymbol{m} = \frac{\partial \boldsymbol{m}}{\partial \sigma} \Delta \sigma
 \end{align}
 The variance can then be written
 \begin{align}
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N}\frac{A^2}{\eta^2} \frac{\Delta \sigma^2}{\boldsymbol{m}_c \boldsymbol{m}_c^T} \boldsymbol{m}_c  \Bigl< \frac{\partial \boldsymbol{m}}{\partial \sigma} \frac{\partial \boldsymbol{m}}{\partial \sigma}^T \Bigr>   \boldsymbol{m}_c^T  \Bigr]
+        \frac{1}{N}\frac{A^2}{\eta^2} \frac{\Delta \sigma^2}{\boldsymbol{m}_c^T \boldsymbol{m}_c} \boldsymbol{m}_c^T  \Bigl< \frac{\partial \boldsymbol{m}}{\partial \sigma} \frac{\partial \boldsymbol{m}}{\partial \sigma}^T \Bigr>   \boldsymbol{m}_c  \Bigr]
 \end{align}
 We will also assume the images are round gaussians with size $\sigma$, such that
 \begin{align}
@@ -194,12 +194,12 @@ We can also calculate $\boldsymbol{m}^T \boldsymbol{m} = 1/4 \pi \sigma^2$. We
 can now rewrite the variance as
 \begin{align}
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{16}{N}\frac{A^2}{4 \pi \sigma^2 \eta^2} \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \boldsymbol{m}_c^T  \Bigl< \boldsymbol{F}^T \boldsymbol{F} \Bigr> \boldsymbol{m} \Bigr]
+        \frac{16}{N}\frac{A^2}{4 \pi \sigma^2 \eta^2} \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \boldsymbol{m}_c^T  \Bigl< \boldsymbol{F} \boldsymbol{F}^T \Bigr> \boldsymbol{m} \Bigr]
 \end{align}
 The term $A^2/4 \pi \sigma^2 \eta^2$ is equal to the square of 
 the native signal-to-noise
 ratio of the coadd measurement based on the variance in equation \ref{eq:coaddvarest}.
-Additional, the quantity $\boldsymbol{m}_c^T  \Bigl< \boldsymbol{F}^T \boldsymbol{F} \Bigr> \boldsymbol{m}$
+Additional, the quantity $\boldsymbol{m}_c^T  \Bigl< \boldsymbol{F} \boldsymbol{F}^T \Bigr> \boldsymbol{m}$
 is identically equal to the value $1/16$.  Thus our final estimate of the variance is
 \begin{align} \label{eq:varbasic}
     {\rm var}\hat{A} = {\rm var}\hat{A_c} \Bigl[ 1 + 
@@ -208,14 +208,14 @@ is identically equal to the value $1/16$.  Thus our final estimate of the varian
 
 We see that the additional variance due to PSF size variations is important
 at relatively high \snr.  For example, if the fractional variation of
-the size is 10\%, and there are 10 images used for the coadd process,
-the additioinal uncertainty, the square root of the variance,
+the size is 0.1, and there are 10 images used for the coadd process,
+the additional uncertainty (the square root of the variance)
 is 10\% at \snr=15.
 
-We may expect the increase in variance to be less for galaxies that
-are larger than the PSF.  If the galaxy is a Gaussian with
-size $\sigma_g$ and the PSF is Gaussian with size $\sigma_p$,
-and that there are small variations in the PSF size,
+We expect the increase in variance to be less for galaxies that
+are larger than the PSF.  If the galaxy is a round Gaussian with
+size $\sigma_g$ and the PSF is a round Gaussian with size $\sigma_p$,
+and only the PSF size varies between images,
 we can use the chain rule to rewrite equation \ref{eq:varbasic} as
 \begin{align} \label{eq:vargal}
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
@@ -225,17 +225,43 @@ we can use the chain rule to rewrite equation \ref{eq:varbasic} as
 \end{align}
 where we have used the definition of the resolution factor $R =
 \sigma_g^2/(\sigma_p^2 + \sigma_g^2)$.  This confirms our
-intuition that large galaxies, with $R \sim 1$ will suffer
-a small increase in variance.
+intuition that measurements of large galaxies, with $R \sim 1$ will suffer
+only a small increase in variance.
 
 \subsection{Monte-carlo Tests of the Toy Example} \label{sec:toymc}
 
-We tested the results of section \ref{sec:toy} using a simple monte carlo.  We
-used \galsim\ to generate image of Gaussian galaxies convolved by Gaussian
-PSFs, and we used the \ngmix\ package
+We tested equation \ref{eq:vargal} using a simple monte-carlo simulation.  We
+used the \galsim\ package to generate images of Gaussian galaxies, convolved by
+Gaussian PSFs, and we used the \ngmix\ package
 \footnote{\url{https://github.com/esheldon/ngmix}} to fit the template flux.
+We used a PSF with FWHM=0.9 arcsec, with Gaussian variation between images
+of $\Delta \sigma_p/\sigma_p = 0.1$.
 
-We varied the PSF size by 
+All images were placed at the center of the image, so that no interpolation was
+required to coadd the images.  We used the same constant noise for all images,
+and used a simple straight mean for the coaddition process.
+
+The primary variables of interest are the signal-to-noise ratio \snr\ and the
+galaxy size relative to the PSF, or equivalently resolution $R$.  We varied the
+size of the galaxy from zero, or star-like, to more than twice the PSF size,
+such that$R = 0.83$. We varied the the \snr\ from $\sim 6$ to $\sim 60$.
+
+The results are shown in figure \ref{fig:mcresults}.  We see that for stars and
+small galaxies with with $R \sim 0$, there is a 20\% increase in at \snr$\sim
+20$.  But for large and relatively low \snr\ galaxies the increase in variance
+can be relatively minor even at \snr=60.
+
+\begin{figure}
+    \centering
+    \includegraphics[]{{cnoise-fwhm0.90-frac0.10-ntrial100000}.pdf}
+
+    \caption{blah}
+
+	\label{fig:mcresults}
+
+\end{figure}
+
+
 
 %\citep{GALSIM2015}
 
