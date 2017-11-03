@@ -147,25 +147,25 @@ The second and third terms average to zero, showing the estimator is unbiased.  
 there is additional variance due to the $\langle\Delta\boldsymbol{m}_i\rangle$ term. We can
 calculate the actual variance of this estimator
 \begin{align}
-    {\rm var}\hat{A} &= \frac{1}{N}\Bigl< \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
+    {\rm var}\hat{A} &= \Bigl< (A - \hat{A})^2 \Bigr>
+\end{align}
+Which we can write in terms of an outer product
+\begin{align}
+    {\rm var}\hat{A} &= \frac{1}{N} (A - \hat{A}) (A - \hat{A})^T \\
+        &= \frac{1}{N} \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
               + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)
               \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
-              + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)^T \Bigr>
+              + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)^T
 \end{align}
 The cross-terms will vanish in the average, and the term involving $\boldsymbol
 \epsilon$ results in the standard variance estimate given in equation
 \ref{eq:coaddvarest}. Thus the full variance is
 \begin{align} 
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \Bigl< \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)  \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)^T \Bigr> \Bigr] \\
-        &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \Bigl< \boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T  C_c^{-1} \boldsymbol{m}_c  \Bigr> \Bigr]
+        \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c}  \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)  \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)^T \Bigr] \\
+        &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T  C_c^{-1} \boldsymbol{m}_c  \Bigr],
 \end{align}
 where we have used the rules of transposition and the fact that the covariance matrix is symmetric.
-The only statistical quantities in this equation are the $\Delta \boldsymbol{m}$, so we can bring
-the averages in
-\begin{align}
-    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \boldsymbol{m}_c^T C_c^{-1} \Bigl< \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T \Bigr>  C_c^{-1} \boldsymbol{m}_c  \Bigr]
-\end{align}
 
 We now depart from generality in order to simplify the calculations.  We assume
 the noise for all images has the same value $\eta$. We further assume that the covariance
@@ -179,7 +179,7 @@ scale $\sigma$
 The variance can then be written
 \begin{align}
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N}\frac{A^2}{\eta^2} \frac{\Delta \sigma^2}{\boldsymbol{m}_c^T \boldsymbol{m}_c} \boldsymbol{m}_c^T  \Bigl< \frac{\partial \boldsymbol{m}}{\partial \sigma} \frac{\partial \boldsymbol{m}}{\partial \sigma}^T \Bigr>   \boldsymbol{m}_c  \Bigr]
+        \frac{1}{N}\frac{A^2}{\eta^2} \frac{\Delta \sigma^2}{\boldsymbol{m}_c^T \boldsymbol{m}_c} \boldsymbol{m}_c^T  \frac{\partial \boldsymbol{m}}{\partial \sigma} \frac{\partial \boldsymbol{m}}{\partial \sigma}^T  \boldsymbol{m}_c  \Bigr]
 \end{align}
 We will also assume the images are round gaussians with size $\sigma$, such that
 \begin{align}
@@ -194,12 +194,12 @@ We can also calculate $\boldsymbol{m}^T \boldsymbol{m} = 1/4 \pi \sigma^2$. We
 can now rewrite the variance as
 \begin{align}
     {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{16}{N}\frac{A^2}{4 \pi \sigma^2 \eta^2} \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \boldsymbol{m}_c^T  \Bigl< \boldsymbol{F} \boldsymbol{F}^T \Bigr> \boldsymbol{m} \Bigr]
+        \frac{16}{N}\frac{A^2}{4 \pi \sigma^2 \eta^2} \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \boldsymbol{m}_c^T  \boldsymbol{F} \boldsymbol{F}^T \boldsymbol{m} \Bigr]
 \end{align}
 The term $A^2/4 \pi \sigma^2 \eta^2$ is equal to the square of 
 the native signal-to-noise
 ratio of the coadd measurement based on the variance in equation \ref{eq:coaddvarest}.
-Additional, the quantity $\boldsymbol{m}_c^T  \Bigl< \boldsymbol{F} \boldsymbol{F}^T \Bigr> \boldsymbol{m}$
+Additional, the quantity $\boldsymbol{m}_c^T  \boldsymbol{F} \boldsymbol{F}^T \boldsymbol{m}$
 is identically equal to the value $1/16$.  Thus our final estimate of the variance is
 \begin{align} \label{eq:varbasic}
     {\rm var}\hat{A} = {\rm var}\hat{A_c} \Bigl[ 1 + 
