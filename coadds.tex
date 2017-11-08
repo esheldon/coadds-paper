@@ -82,17 +82,17 @@ Here we estimate the additional uncertainty in the measured flux when coadding,
 for the example of ``matched-filter'' photometry, where a linear fit is performed
 for the amplitude of a model.
 
-Let's consider an optimal estimator for a single unknown parameter that
-is linear in the observables. Let the model $\boldsymbol{M}$ be $\boldsymbol{M}
-= A\boldsymbol{m}$, where $A$ is a scalar amplitude and $\boldsymbol{m}$ is a
-normalized signal model, or template. Then the log-likelihood for $A$ (assuming
-a Gaussian signal likelihood) and some data vector $\boldsymbol{d}$ is
+Let's consider an optimal estimator for a single unknown parameter that is
+linear in the observables. Let the model be $A\boldsymbol{m}$, where $A$ is a
+scalar amplitude and $\boldsymbol{m}$ is a normalized signal model, or
+template. Then the log-likelihood for $A$ (assuming a Gaussian signal
+likelihood) and some data vector $\boldsymbol{d}$ is
 \begin{align}
   \log L = - (\boldsymbol{d} - A\boldsymbol{m})^T\: C^{-1} (\boldsymbol{d} - A\boldsymbol{m}) - \frac{1}{2} \det(2\pi C )
 \end{align}
-where $C$ is the noise covariance. The optimal estimator $\hat{A}$ is the value
-that maximizes this expression for $A$. With some algebra, it can be shown that
-this value is:
+where $C$ is the noise covariance.  The optimal estimator $\hat{A}$ is the
+value that maximizes this expression for $A$. With some algebra, it can be
+shown that this value is:
 \begin{align}
 \hat{A} = \frac{\boldsymbol{m}^T C^{-1} \boldsymbol{d}}{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}
 \end{align}
@@ -103,7 +103,9 @@ and that the variance of $\hat{A}$ is
 
 In the case of photometry, $\boldsymbol{m}$ is the normalized profile of the
 star or galaxy, $A$ is the measured flux, and $\boldsymbol{d}$ is the set of
-pixels on which the measurement will be made.
+pixels on which the measurement will be made.  The equations above are general,
+but for simplicity in what follows, we assume the noise comes from a uniform
+background, so there is no signal in the covariance.
 
 For a set of $N$ images of the same sky, the data is the concatenation of the
 pixel values in each epoch, i.e., $\boldsymbol{d} = \{d_0, d_1, ..., d_n \}$.
@@ -133,12 +135,12 @@ with estimator variance
 {\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}.
 \end{align}
 
-These variance estimators predict that the variance of the coadd estimator is
-generally greater than or equal to that of the optimal estimator using the
-original images, assuming the templates are accurate.  This is because the
-averaged signal will generally be less varied than the set of input images,
-such than $\boldsymbol{m}^T C^{-1} \boldsymbol{m} \sim \sum \boldsymbol{m}^2$
-is smaller for the coadd.
+These variance estimators predict, for the case of background-only noise, that the
+variance of the coadd estimator is generally greater than or equal to that of
+the optimal estimator using the original images, assuming the templates are
+accurate.  This is because the averaged signal will generally be less varied
+than the set of input images, such than $\boldsymbol{m}^T C^{-1} \boldsymbol{m}
+\sim \sum \boldsymbol{m}^2$ is smaller for the coadd.
 
 In order to gain better intuition for this increased variance, we depart from
 generality in the data, and adopt a toy model for the signal.  First, we assume
