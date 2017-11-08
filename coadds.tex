@@ -35,6 +35,9 @@
 
 \newcommand{\lognormscatt}{30}
 
+\newcommand{\model}{\mbox{$\boldsymbol{m}$}}
+\newcommand{\modelc}{\mbox{$\boldsymbol{m}_c$}}
+
 %\newcommand{\mnras}{MNRAS}%
 %\newcommand{\apj}{ApJ}%
 %\newcommand{\aj}{AJ}%
@@ -73,7 +76,182 @@ When to Coadd}
     dark energy
 \end{keywords} 
 
+\section{Template Fluxes} \label{sec:template}
+
+Here we estimate the additional uncertainty in the measured flux when coadding,
+for the example of ``matched-filter'' photometry, where a linear fit is performed
+for the amplitude of a model.
+
+Let's consider an optimal estimator for a single unknown parameter that
+is linear in the observables. Let the model $\boldsymbol{M}$ be $\boldsymbol{M}
+= A\boldsymbol{m}$, where $A$ is a scalar amplitude and $\boldsymbol{m}$ is a
+normalized signal model, or template. Then the log-likelihood for $A$ (assuming
+a Gaussian signal likelihood) and some data vector $\boldsymbol{d}$ is
+\begin{align}
+  \log L = - (\boldsymbol{d} - A\boldsymbol{m})^T\: C^{-1} (\boldsymbol{d} - A\boldsymbol{m}) - \frac{1}{2} \det(2\pi C )
+\end{align}
+where $C$ is the noise covariance. The optimal estimator $\hat{A}$ is the value
+that maximizes this expression for $A$. With some algebra, it can be shown that
+this value is:
+\begin{align}
+\hat{A} = \frac{\boldsymbol{m}^T C^{-1} \boldsymbol{d}}{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}
+\end{align}
+and that the variance of $\hat{A}$ is
+\begin{align}
+{\rm var}\hat{A} = \frac{1}{{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}}
+\end{align}
+
+In the case of photometry, $\boldsymbol{m}$ is the normalized profile of the
+star or galaxy, $A$ is the measured flux, and $\boldsymbol{d}$ is the set of
+pixels on which the measurement will be made.
+
+For a set of $N$ images of the same sky, the data is the concatenation of the
+pixel values in each epoch, i.e., $\boldsymbol{d} = \{d_0, d_1, ..., d_n \}$.
+This allows the template $\boldsymbol{m}$ to be the concatentation of the
+templates appropriate for each epoch, if for instance the PSF varies from
+exposure to exposure.
+
+Now suppose we coadd the images using a straight mean, such that $\langle
+\boldsymbol{d} \rangle = \frac{1}{N}\sum\limits_i d_i$, and the covariance
+matrix is $C_c = \frac{1}{N^2}\sum\limits_i C_i$.  The template
+$\boldsymbol{m}_{\rm c}$ is then the mean $\boldsymbol{m_c} = \frac{1}{N}\sum\limits_i m_i$
+and the resulting operation is:
+\begin{align}
+    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c}^T C_c^{-1} \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_{\rm c}^t C_c^{-1}\boldsymbol{m}_{\rm c}} 
+\end{align}
+with estimator variance
+\begin{align} \label{eq:coaddvarest}
+{\rm var}\hat{A}_{\rm c} = \frac{1}{\boldsymbol{m}_{\rm c}^T C_c^{-1}\boldsymbol{m}_{\rm c}},
+\end{align}
+where the indices in these expressions run over epochs. The multi-fitting
+method, by contrast, would use the optimal estimator for each epoch:
+\begin{align}
+\hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}
+\end{align}
+with estimator variance
+\begin{align}
+{\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}.
+\end{align}
+
+These variance estimators predict that the variance of the coadd estimator is
+generally greater than or equal to that of the optimal estimator using the
+original images, assuming the templates are accurate.  This is because the
+averaged signal will generally be less varied than the set of input images,
+such than $\boldsymbol{m}^T C^{-1} \boldsymbol{m} \sim \sum \boldsymbol{m}^2$
+is smaller for the coadd.
+
+In order to gain better intuition for this increased variance, we depart from
+generality in the data, and adopt a toy model for the signal.  First, we assume
+that the noise in all images is equal, with standard deviation $\eta$, such
+that the estimators become
+\begin{align}
+    \hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i^T \boldsymbol{d}}{\sum\limits_i \boldsymbol{m}_i^T \boldsymbol{m}_i}&, ~~
+    {\rm var}\hat{A}_{\rm multi} = \frac{\eta^2}{\sum\limits_i \boldsymbol{m}_i^T \boldsymbol{m}_i}\\
+    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c}^T \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_{\rm c}^T \boldsymbol{m}_{\rm c}}&, ~~
+    {\rm var}\hat{A}_{\rm c} = \frac{\eta^2/N}{\boldsymbol{m}_{\rm c}^T \boldsymbol{m}_{\rm c}}
+\end{align}
+
+We now assume that template for the coadd is related to that
+in the original images by perturbations due to small variations
+in the scale $\sigma$:
+\begin{align}
+    \boldsymbol{m}_{\rm i} &= \boldsymbol{m}_{\rm c} + \Delta \boldsymbol{m}_i \\
+                           &\approx \boldsymbol{m}_{\rm c} + \frac{\partial \boldsymbol{m}_{\rm c}}{\partial \sigma} \Delta \sigma
+\end{align}
+The ratio of variances then becomes
+\begin{align} \label{eq:generalperturb}
+    \frac{ {\rm var} \hat{A}_{\rm c} }{{\rm var} \hat{A}_{\rm multi} } = 
+    1 + \frac{1}{N}\frac{\sum\limits_i \Delta \model_i^T \Delta \model_i }{\modelc^T \modelc} \approx 
+    1 + \frac{(\Delta \sigma)^2}{N}\frac{\sum\limits_i \left( \partial \modelc/\partial \sigma \right)_i^T \left( \partial \modelc/\partial \sigma \right)_i }{\modelc^T \modelc}
+\end{align}
+
+We further assume the template is a round Gaussian
+\begin{align}
+    \modelc = \frac{1}{2 \pi \sigma^2} e^{-r^2/2 \sigma^2 }
+\end{align}
+with derivative
+\begin{align}
+    \frac{\partial \modelc}{\partial \sigma} &= \frac{1}{2 \pi \sigma^2} \frac{2}{\sigma} e^{r^2/2 \sigma^2} \Bigl( \frac{1}{2}\frac{r^2}{\sigma^2} - 1 \Bigr).
+\end{align}
+For these gaussian models all terms in equation \ref{eq:generalperturb} can
+be readily calculated in the continuous limit, and we find
+\begin{align} \label{eq:varbasic}
+    \left( \frac{ {\rm var} \hat{A}_{\rm c} }{{\rm var} \hat{A}_{\rm multi} } \right)_{\rm toy} = 
+    1 + 2 \left( \frac{\Delta \sigma}{\sigma} \right)^2
+\end{align}
+where $(\Delta \sigma)^2$ is to be interpreted as the rms variation
+of the size.
+
+We expect the increase in variance to be less for the case
+of large galaxies convolved by a PSF.  If the galaxy is a round Gaussian with
+size $\sigma_g$ and the PSF is a round Gaussian with size $\sigma_p$,
+and only the PSF size varies between images,
+we can use the chain rule to rewrite equation \ref{eq:varbasic} as
+\begin{align} \label{eq:vargal}
+    \left( \frac{ {\rm var} \hat{A}_{\rm c} }{{\rm var} \hat{A}_{\rm multi} } \right)_{\rm toy} &= 
+    1 + 2 \left( \frac{\sigma_p^2}{\sigma_g^2 + \sigma_p^2}\right)^2 \left( \frac{\Delta \sigma_p}{\sigma_p} \right)^2 \\
+    &\equiv 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta \sigma_p}{\sigma_p} \right)^2
+\end{align}
+where we have used the definition of the resolution factor $R =
+\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$.  This confirms our
+intuition that measurements of large galaxies, with $R \sim 1$ will suffer
+less increase in variance.
+
+Note that, for this toy model, the template is not exactly equal to the mean of
+the individual templates.  Thus we expect the toy model to slightly
+over-predict the increase in variance due to coaddition.
+
+\subsection{Monte-carlo Tests For Template Fluxes} \label{sec:toymc}
+
+We tested equation \ref{eq:vargal} using a simple monte-carlo simulation.  We
+used the \galsim\ package to generate images of Gaussian galaxies, convolved by
+Gaussian PSFs, and we used the \ngmix\ package
+\footnote{\url{https://github.com/esheldon/ngmix}} to fit the template flux.
+We used a PSF with FWHM=0.9 arcsec, with Gaussian variation between images
+of $\Delta \sigma_p/\sigma_p = 0.1$.
+
+All images were placed at the center of the image, so that no interpolation was
+required to coadd the images.  We used the same constant noise for all images,
+and used a simple straight mean for the coaddition process.
+
+The primary variable of interest is the resolution $R$.  We varied the
+size of the galaxy from zero, or star-like, to more than twice the PSF size,
+such that$R = 0.83$.
+
+The results are shown in figure \ref{fig:mcresults}.  The points are the
+measured values, which are predicted very well by the exact variance
+estimators, shown as the solid line.  Also shown are the predicted values from
+the toy model in equation \ref{eq:vargal}.  As expected, the toy model slightly
+over-predicts the increase in variance, but is evidently useful for
+understanding how the effect scales with resolution.
+
+\begin{figure}
+    \centering
+    \includegraphics[]{{cnoise-fwhm0.90-frac0.10-ntrial100000}.pdf}
+
+    \caption{Measured and predicted values for the increased
+    uncertainty due to coaddition, for the Gaussian galaxies
+    and stars.  The points are
+    the measured values, and the solid line are the exact prediction.
+    The dashed line shows the simple toy model presented
+    in equation \ref{eq:vargal}.}
+
+	\label{fig:mcresults}
+
+\end{figure}
+
+%\citep{GALSIM2015}
+
+%\bibliographystyle{mn2e}
+% Bib database
+%\bibliography{apj-jour,astroref}
+
+\begin{comment}
+\appendix 
+
 \section{Toy Example} \label{sec:toy}
+
+This needs to be rewritten, since it actually is the affect of a noisy template.
 
 Here we estimate the additional uncertainty in the measured flux when coadding,
 for the example of ``matched-filter'' photometry.  A key to this derivation is
@@ -293,12 +471,7 @@ naive analytic coadd variance prediction, are slightly lower than the filled
 circles from the measured variance of the optimal estimator:  there is some
 additional variance due to using a slightly wrong template.
 
-
-%\citep{GALSIM2015}
-
-%\bibliographystyle{mn2e}
-% Bib database
-%\bibliography{apj-jour,astroref}
+\end{comment}
 
 \end{document}
 
