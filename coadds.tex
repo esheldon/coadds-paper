@@ -153,7 +153,7 @@ that the estimators become
 
 We now assume that template for the coadd is related to that
 in the original images by perturbations due to small variations
-in the scale $\sigma$:
+in a scale of the object $\sigma$:
 \begin{align}
     \boldsymbol{m}_{\rm i} &= \boldsymbol{m}_{\rm c} + \Delta \boldsymbol{m}_i \\
                            &\approx \boldsymbol{m}_{\rm c} + \frac{\partial \boldsymbol{m}_{\rm c}}{\partial \sigma} \Delta \sigma
@@ -216,13 +216,13 @@ and used a simple straight mean for the coaddition process.
 
 The primary variable of interest is the resolution $R$.  We varied the
 size of the galaxy from zero, or star-like, to more than twice the PSF size,
-such that$R = 0.83$.
+such that $R = 0.83$.
 
 The results are shown in figure \ref{fig:mcresults}.  The points are the
 measured values, which are predicted very well by the exact variance
 estimators, shown as the solid line.  Also shown are the predicted values from
 the toy model in equation \ref{eq:vargal}.  As expected, the toy model slightly
-over-predicts the increase in variance, but is evidently useful for
+over-predicts the increase in variance, but it is evidently useful for
 understanding how the effect scales with resolution.
 
 \begin{figure}
@@ -232,7 +232,7 @@ understanding how the effect scales with resolution.
     \caption{Measured and predicted values for the increased
     uncertainty due to coaddition, for the Gaussian galaxies
     and stars.  The points are
-    the measured values, and the solid line are the exact prediction.
+    the measured values, and the solid line is the exact prediction.
     The dashed line shows the simple toy model presented
     in equation \ref{eq:vargal}.}
 
