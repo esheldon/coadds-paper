@@ -1,34 +1,52 @@
-%\documentclass[usegraphicx,usenatbib]{mn2e}
-%\documentclass[a4paper,fleqn,usenatbib]{mnras}
-\documentclass[a4paper,fleqn,usenatbib,referee]{mnras}
-%\documentclass[useAMS,usegraphicx,usenatbib]{mn2e}
+\documentclass[fleqn,useAMS,usenatbib]{mnras}
 
-\usepackage{graphicx}
-\usepackage{verbatim}
-\usepackage{color}
-\usepackage[normalem]{ulem} % for striking out with \sout
-\usepackage{amsmath} % for boldsymbol
-\usepackage{times}
-\input{newcommands.tex}
+%=====================================================================
+% CUSTOM: PACKAGES, MACROS & SETTINGS
+%=====================================================================
 
-\def\eps@scaling{1.0}% 
+% packages for figures
+\usepackage{graphicx,todonotes}
+% packages for symbols
+\usepackage{latexsym,amssymb}
+% AMS-LaTeX package for e.g. subequations
+\usepackage{amsmath,morefloats}
+\usepackage{natbib,graphicx,amsmath,subfigure,color}
+\topmargin-1cm
+\graphicspath{{figures/}}
+
+\newcommand{\hmsun}{\ensuremath{h^{-1}M_{\odot}}}
+\newcommand{\hgpc}{$h^{-1}$Gpc}
+\newcommand{\hmpc}{$h^{-1}$Mpc}
+\newcommand{\hkpc}{$h^{-1}$kpc}
+\newcommand{\beq}{\begin{equation}}
+\newcommand{\eeq}{\end{equation}}
+\newcommand\notedo[1]{\todo[color=yellow, inline, size=\small]{To do:
+    #1}}
+\newcommand\notewrite[1]{\todo[color=orange, inline, size=\small]{To write: #1}}
+\newcommand\noteask[1]{\todo[color=cyan, inline, size=\small]{To ask: #1}}
+\newcommand\notecontrib[1]{\todo[color=green, inline, size=\small]{Contributors: #1}}
+\newcommand{\vecM}{\mbox{\boldmath $M$}}
+\newcommand{\vecg}{\mbox{\boldmath $g$}}
+\newcommand{\vece}{\mbox{\boldmath $e$}}
+\newcommand{\veck}{\mbox{\boldmath $k$}}
+\newcommand{\vecQ}{\mbox{\boldmath $Q$}}
+\newcommand{\vecF}{\mbox{\boldmath $F$}}
+\newcommand{\vecD}{\mbox{\boldmath $D$}}
+\newcommand{\matR}{\mbox{$\bf R$}}
+\newcommand{\matC}{\mbox{$\bf C$}}
+\newcommand{\bnab}{\boldsymbol{\nabla}}
+\newcommand{\bnabg}{\boldsymbol{\nabla_g}}
 
 \newcommand{\galsim}{\texttt{GALSIM}}
 \newcommand{\ngmix}{\texttt{ngmix}}
+\newcommand{\nnsim}{\texttt{nsim}}
 
 \newcommand{\snr}{$S/N$}
 \newcommand{\sn}{$S/N$}
+\newcommand{\coadd}{{\rm coadd}}
 \newcommand{\Msn}{$(S/N)_{\textrm{matched}}$}
 \newcommand{\Tsn}{$(S/N)_{\textrm{size}}$}
 \newcommand{\fsn}{$(S/N)_{\textrm{flux}}$}
-
-% stolen from the BA14 source
-\newcommand{\vecg}{\mbox{\boldmath $g$}}
-\newcommand{\vecD}{\mbox{\boldmath $D$}}
-\newcommand{\vecQ}{\mbox{\boldmath $Q$}}
-\newcommand{\matR}{\mbox{$\bf R$}}
-\newcommand{\matC}{\mbox{$\bf C$}}
-\newcommand{\bnabg}{ \boldsymbol{\nabla_g}}
 
 \newcommand{\desreq}{$4\times 10^{-3}$}
 \newcommand{\lsstreq}{$2\times 10^{-3}$}
@@ -36,47 +54,249 @@
 \newcommand{\lognormscatt}{30}
 
 \newcommand{\model}{\mbox{$\boldsymbol{m}$}}
-\newcommand{\modelc}{\mbox{$\boldsymbol{m}_c$}}
-
-%\newcommand{\mnras}{MNRAS}%
-%\newcommand{\apj}{ApJ}%
-%\newcommand{\aj}{AJ}%
-%\newcommand{\pasp}{PASP}%
-%\newcommand{\jcp}{J.~Chem.~Phys.}
+\newcommand{\modelc}{\mbox{$\boldsymbol{m}_\coadd$}}
 
 
-%\newcommand{\apjs}{"Astrophys. J., Suppl. Ser."}
 
-%\slugcomment{Last revision \today}
-%\shortauthors{Sheldon}
-%\shorttitle{Bayesian Shear Estimation}
-
-
-\title{The Little Coadd that Could\\
-or\\
-When to Coadd}
+\newcommand{\comment}[1]{{\textcolor{cyan}{#1}}}
+%=====================================================================
+% FRONT MATTER
+%=====================================================================
 
 
-\author[E. Sheldon, B. Armstrong, E. Huff]{E. Sheldon, B. Armstrong, E. Huff}
+%=====================================================================
+% BEGIN DOCUMENT
+%=====================================================================
+
+
+\title{The little coadd that could:  Estimating shear from coaddeded images}
+
+\author{Bob Armstrong, Erin Sheldon, Eric Huff, Jim Bosch, Peter Melchior, Rachel Mandelbaum, Robert Lupton}
 
 \begin{document}
-
+\date{Draft \today}
 \maketitle
-
+% * <rearmstr@gmail.com> 2018-07-05T16:41:39.693Z:
+%
+% ^.
 \begin{abstract}
-
-    Abstract
-
+Upcoming wide field surveys will have many overlapping epochs of the same region of sky.  The conventional wisdom is that in order to reduce the systematic errors sufficiently for systematics limited measurements, like cosmic shear, we must do simultaneous fitting of all the epochs.  Using current algorithms this will require a significant amount of computing time and effort.  In this paper, we examine the possibility of doing shear measurements on coadded images directly.  We show on a set of simulations that there is no bias or degradation in performance for two independent shear estimators.  The one caveat to working on coadds, is that we must remove images that overlap a CCD boundary, as the PSF is not well defined.  We estimate that the number of epochs that must be rejected for a survey like LSST is on the order of $\sim 3\%$.
 \end{abstract}
 
 
-\begin{keywords}                                                                    
-    cosmology: observations,
-    gravitational lensing: weak,
-    dark energy
-\end{keywords} 
+\section{Introduction}
 
-\section{Template Fluxes} \label{sec:template}
+Future large scale astronomical surveys such as LSST \citep{LSST2009}, Euclid \citep{Laureijs2011}, and WFIRST \citep{Spergel2015} will gain an unprecedented increase in the combination of depth and area coverage.  Thus, enabling significant advances in many astronomical fields from the solar system to large scale cosmology.  The observing strategy for these surveys will repeatedly observe the same patch of sky in different filters.  The number of observations varies significantly between surveys and can range from only a handful to hundreds of exposures.  Having repeated visits helps to build up the required depth, fill-in chip gaps, and reject artifacts like cosmic rays.  Multiple observations can also help reduce systematic uncertainties, especially if they are taken on different parts of the camera.  One question that remains to be answered is, what is the optimal way to combine the information from these distinct sets of observations?  Past and current surveys have typically fallen into three categories:
+
+\begin{enumerate}
+\item \label{method:first} Resample all the images to a common pixel grid and take a weighted sum to construct a single coadded image.  Measurements are performed on the coadd with no need to return to the individual images.
+\item \label{method:second} Perform measurements on each epoch separately.  Combine these measurements by taking a weighted average.  
+\item \label{method:third} Create the coadd as in \ref{method:first}, but only use the it to detect objects.  With this information, go back to each of the individual epochs and do a joint simultaneous measurement of all the images.
+\end{enumerate}
+
+The simplest option is \ref{method:first}, as it significantly reduces the complexity and computation time.  For a survey with many epochs this is a huge gain.  Many lensing surveys have chosen to work on coadded images \citep{Hoekstra2006, Leauthaud2007, Hettersheidt2007, Lin2012,Melchior2015, Jee2016, Mandelbaum2018}.  While this approach is attractive, it can also incur a number of problems if not done carefully.  First, we must ensure that the individual epochs are properly registered relative to another.  Mis-registered images can severely distort the shape of objects. Also, the PSF can be challenging to model on the coadd due to the fact that as you cross from the boundary of one detector to another there will discontinuous "jumps" in the shape and size of the PSF.  In addition, when combining images where the size of the PSF varies widely, there will be loss in S/N by doing a simple average.  We discuss these problems in more detail in Section ~\ref{Section:Coaddition}.
+
+Method \ref{method:second} has been used in fewer cases \citep{Jarvis2003}.  The main problem with this approach is that there will be objects that do not have a large enough $S/N$ to be detected on any individual epoch, but will be detected on the coadd.  However, there has been some work recently on how one might do this \citep{Budavari2017}.
+
+With the need to reduce systematic errors, a number of recent surveys have followed the hybrid method \ref{method:third}.  The CFHTLens \citep{Heymans2013} and KIDS \citep{Hildebrandt2017} collaborations performed photometry and detection on the coadds and shear measurements via multi-epoch fitting. For the Dark Energy Survey (DES) \citep{Zuntz2017}, only object detection was done on the coadd and all other measurements were performed on individual epochs.  This approach has worked well to reduce the systematic errors sufficiently low for cosmological analyses.  Can this multi-epoch fitting approach be applied to future surveys as well?
+
+As the number of exposures increases, the computational demand scales as well.  Existing surveys typically have fewer than $\sim10$ epochs to fit simultaneously. For a survey like LSST, where the number of epochs is an order of magnitude larger, it is likely that multi-epoch fitting will overwhelm the computing budget.  Again, being able to instead work on a single coadd could reduce a significant amount of the processing burden.  There may also be other reasons to prefer working on the coadds.  When separating blended objects into their individual sources, there is limited information available on single epochs.  The higher $S/N$ on the coadds makes this much easier.  
+
+In this paper, we explore the possibility of avoiding multi-epoch fitting by demonstrating that we can recover shear on coadds without incurring systematic errors.  In Section \ref{Section:Coaddition}, we discuss the problems using coadds and potential ways to mitigate them.  We propose to create per object coadds of the image, PSF and the noise.  We test this proposal by looking at the measured shear bias on simulations of both multi-epoch and coadd data.  Section \ref{Section:Simulation} describes the setup and properties of the simulations.  We test two separate shear measurement pipelines: BFD and Metacalibration.  We summarize how these algorithms were configured and applied in Section \ref{Section:Measurement}.  Section \ref{Section:Results} shows the results of these methods.  We show that for both shear methods, we are able to recover unbiased results.  The advantage of running more than one algorithm shows that our results are not specific to a particular shear estimator, but are more generally applicable.   Finally, in Section ~\ref{Section:Exclusion} we look at the cost of rejecting images from our coadds for the specific case of LSST.
+
+
+\section{Coaddition}
+\label{Section:Coaddition}
+
+The simplest means of combining images is to use a median, weighted mean or clipped mean.  None of these are optimal in $S/N$ because they do not properly account for variations in PSF sizes and background levels.  For the majority of detections, which are small faint objects, the epochs with the smallest seeing will have the most information.  \cite{Kaiser2004,Zackay2017} proposed constructing an optimal coadd, by stacking the image convolved with the PSF.  This results in an image that loses no information when combining epochs of different seeing.  Further research in this area seems promising in order to maximize the $S/N$ for a coadd.  However, for this paper we only consider the scenario of using a simple weighted mean.  
+
+\subsection{Image Registration and Noise}
+\label{Subsection:Registration}
+
+\begin{figure*}
+\includegraphics[width=0.65\textwidth]{CoaddNoise.png}
+\caption{
+The variance map from a random location from the HSC DR1 survey.  Darker colors indicate lower variance or a larger number of visits.  This map is constructed by coadding all the variance maps of the individual epochs.
+}
+\label{fig:noise}
+\end{figure*}
+
+In order to coadd, we must account for the actual pointing of each image and the local distortion caused by the optics, atmosphere, etc.  This requires resampling and interpolating each image onto the same coordinate grid.  This interpolation will cause the noise in the image to have correlations from pixel to pixel.  In addition, depending on the local distortion and relative offset between pixel grids, this can cause the noise to become non-stationary, i.e. it can vary over the size of the image.  Figure \ref{fig:noise} shows a pixel variance map of the coadded image from a random position in the HSC survey \cite{HSC_DR1} from their first data release.  The image cutout corresponds to a region roughly $3\arcmin \times 1.5\arcmin$ in area.  The darker regions have more observations and hence lower variance.  The large slices seen correspond to edges of individual CCDs.  Also visible are the small scale variations resulting from resampling and grid offsets.  The streaks correspond to cosmic rays that are masked on individual epochs.  The range of variations is $\sim10\%$ and the scale on which they vary is close to the average size of on object (see \ref{Section:Exclusion}).
+
+
+By definition, the variance map does not include the pixel to pixel covariance.  This will also vary spatially depending on the dither pattern and interpolation kernel.  For typical observing patterns in HSC, the amount of variance lost to covariance is $~10\%$.  The correlated noise pattern must be taken into account to achieve the precision in weak lensing. \cite{Gurvich2016} showed that ignoring such correlations results in errors of a few percent, well above the requirements.  
+
+With a complete knowledge of the astrometric shifts and distortions, it is, in principle, possible to construct the full pixel covariance for a given region.  However this is far from practical and few algorithms currently would be able to take advantage of such information.  As an alternative, we propose to take Monte Carlo realizations of the noise for each epoch and coadd them in the same way as the image.  The resulting coadded noise image can then be used to account for the correlations. 
+
+
+\subsection{PSF}
+\label{Subsection:PSF}
+
+In many situations, we need to be able to model the PSF from the observed stars and interpolate it to the positions of galaxies.  Typically, a low order polynomial is used to describe the variation of the PSF across a CCD.  The challenge on a coadd is that you have sharp changes whenever you cross the edge of a detector in any epoch.  Given this, it can be difficult to construct a model on the coadd.  An alternative approach used by \cite{Jee2016,Mandelbaum2018} is to create a valid coadded PSF by resampling and interpolating the single epoch PSFs in the same way as the images \cite(DLS, HSC).  This avoids any problems of having to spatially interpolate a complex PSF model.  However, objects that include an epoch which crosses a detector boundary will pose a problem ,as the PSF is not be well defined.  For HSC DR1, objects that contained such a boundary image were flagged and corresponded to $\sim15\%$ of the detected objects.  Because the PSF is potentially inaccurate, these objects should be removed from scientific analyses.  This will not be a viable option for a survey like LSST, as almost every object will cross at least one CCD boundary.  Instead of flagging these objects, we propose to simply throw out epochs that cross a detector boundary when creating the coadd.  This means we can no longer construct a unique coadd for all objects, as each object will need to potentially reject different epochs.  But the advantage is that the coadded PSF model can be correctly reconstructed.  We discuss the loss of depth from rejecting these visits in \ref{Section:Exclusion}.
+
+\subsection{Expected Flux $S/N$ loss}
+\label{Subsection:FluxSN}
+
+To gain some intuition, we derive the functional form of the expected loss in $S/N$ for a toy model due to coaddition relative to multi-epoch.  For the toy model we use data that follows a circular Gaussian and are only interested in measuring the flux, $A$, of the model.  In this case we can analytically compute the uncertainty in the estimated flux, $\hat{A}$, from a linear fit to the data.  In Appendix \ref{Subsection:FluxSN}, we show that the ratio of the flux variance derived from the coadd to that from fitting the epochs simultaneously is:
+\begin{align} \label{eq:vargal}
+    \left( \frac{ {\rm var} \hat{A}_\coadd}{{\rm var} \hat{A}_{\rm multi} } \right) &
+    \approx 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta \sigma_p}{\sigma_p} \right)^2,
+\end{align}
+where $\sigma_p$ is the PSF size, $\Delta \sigma_p$ is the RMS scatter in PSF size, and $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$ is the ratio of the galaxy size, $\sigma_g$, to the PSF size.  This result shows the increased variance is proportional to the resolution, $R$, and the variation in PSF size.  For a large galaxy $R$ moves toward 1 and a star is near zero, therefore the effect is largest on stars.  In cases where there are significant PSF variations of order 1, the variance could be increased by a factor of 2 or three for star-like objects.  However, most current and future surveys have significantly less PSF variation than this, on the order of 0.1. 
+
+We tested the validity of equation \ref{eq:vargal} using a simple Monte Carlo simulation.  We used the \galsim\ package to generate images of Gaussian galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package \footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used a PSF with FWHM=0.9 arcsec, with Gaussian variation between images of $\Delta \sigma_p/\sigma_p = 0.1$.
+
+All images were placed at the center of the image, so that no interpolation was required when coadding the images.  We used the same constant noise for all images, and used a simple mean for the coaddition process.  The primary variable of interest is the resolution $R$.  We varied the size of the galaxy from zero, or star-like, to more than twice the PSF size, such that $<R> = 0.83$.  A comparison of the results from the simulations and analytical formula are shown in Figure \ref{fig:mcresults}.  The points are the measured values and the solid line are the exact variance estimators from \ref{eq:exact_var_coadd} and \ref{eq:exact_var_mult}.  The dotted lines are the values predicted values from the toy model in equation \ref{eq:vargal}.  We can see that the toy model slightly over-predicts the increase in variance, but is still evidently useful for understanding how the effect scales with resolution.  For a given survey we can use this to predict the effect that coaddition will have on the flux uncertainty.  For current and future surveys the effect seems to be quite small, especially for galaxys.
+
+\begin{figure}
+
+\includegraphics[width=0.45\textwidth]{toy-model.png}
+\caption{Measured and predicted values for the increased uncertainty due to coaddition, for the Gaussian galaxies and stars.  The points are the measured values from simulations, and the solid line is the exact prediction from equations in Appendex \ref{Section:FluxSN}.  The dashed line shows the simple toy model presented in equation \ref{eq:vargal}.}
+\label{fig:mcresults}
+
+\end{figure}
+
+
+
+\section{Simulations}
+\label{Section:Simulation}
+
+
+While the insight derived in the previous section was instructive, there are many potential complications in real data that could make things harder when measuring shear.  Therefore, we construct a suite of simulations to test the impact of coaddition specifically for shear estimators.  The goal is to simulate multiple epochs of the same galaxy with a known shear and compare the measured shear from both a multi-epoch approach and when coadding the epochs together.  The observing conditions for each epoch (noise, PSF, etc.) are simulated to roughly match observations from DES data.  While DES will have only ten epochs by the end of the survey, it still provides a useful test while reducing somewhat the computation time.  Even with 10 epochs, the computation time to generate the dataset is significant as we need to simulate billions of galaxies to reach the needed precision for cosmic shear.  With fewer epochs, we may also be more sensitive to certain systematic errors that could get averaged down for a survey with many more observations.
+
+To generate the galaxy population we use code from the \nnsim\ package \footnote{\url{https://github.com/esheldon/nsim}} which is based on \galsim\ and \ngmix\.  The generated galaxy images have the following properties:
+\begin{itemize}
+\item We generate single galaxy images on 48x48 postage stamps with no neighbors.
+\item The pixel noise is uniform for each visit and is modeled as a zero-mean Gaussian with $\sigma$ ranging from 0.5-0.6.
+\item Assume the PSF model is perfectly known.
+\item The PSF model is a Moffat with $\beta=3.5$.
+\item The \textsf{FWHM} of the PSF varies for each epoch as a Log-Normal distribution with mean 0.95 and $\sigma=0.1$ 0.1.  Values are truncated between 0.8 and 1.15.
+\item The PSF ellipticity is Gaussian with a mean of 0.0 and 0.01 for $e_1$ and $e_2$ respectively, and $\sigma=0.01$.
+\item The galaxy models are pure exponentials.  
+\item We sample from an empirical model for the flux and size based on \textsf{COSMOS} data.  We used the \textsf{COSMOS} data packaged along with the \galsim\ software to construct a kernel density estimator for the size and flux.  For the bandwith of the estimator we usea kernel with 0.1$\times$ the intrinsic data covariance.  
+\item The intrinsic ellipticity is drawn from the distribution $P(e) \propto (-e^2)^2 \rm{exp}(-e^2/2\sigma_e^2)$ with $\sigma=0.02$.
+\item We generate 10 epochs for each object.  
+\item Each visit has a random shift applied within a 0.5 pixel radius.
+\item The Jacobian values of the WCS for each exposure are allowed to vary for each epoch.  The amount of variation is taken from values measured on DES.
+\item To resample the images we use a 3rd order Lanczos kernel.
+\item For coaddition, we compute a mean weighted by the inverse of the pixel variance.
+\item We construct a coadded noise image, as described in \ref{Subsection:Registration}, by generating a single Monte Carlo realization of the noise for each epoch and resampling and coadding them.
+\item The coadded PSF is constructed by resampling and coadding the individual PSFs for each epoch.
+\item All galaxies are sheared by $g_1=0.02$.
+\end{itemize}
+
+The choice of using simplified galaxy models was employed solely to reduce the computational run time.  For more complicated models there was significant computation time in generating the images.  We did some limited testing of more complicated galaxy models with reduced statistics, and these showed no sign of problems.  Since both of the shear measurement pipelines employed here have already shown to be largely insensitive to the type of galaxy model chosen, we do not expect this to affect our results.
+
+
+\section{Measurement Methods}
+\label{Section:Measurement}
+We employ two different algorithms to measure the applied shear.  We briefly summarize these methods and describe how they were applied for these simulations.
+
+\subsection{BFD}
+\label{Section:BFD}
+
+The Bayesian Fourier Domain (BFD) method \citep{Bernstein2014,Bernstein2016} was designed to overcome some of the inherent biases that arise from the measurement of galaxy shapes.  It relies on measuring the distribution of intensity-weighted moments in Fourier space.  It requires knowledge of the true intrinsic distribution of these moments, which we call the prior, and their derivatives with respect to shear.  We can use observations of a deeper dataset to approximate the true prior distribution.  Most ongoing and future large surveys contain a smaller, deeper component suitable for this purpose.  Given that we are computing moments with a fixed weight function, the moments and their derivatives can be computed analytically for each galaxy.  
+
+As noted in \citep{Bernstein2016}, because the BFD moments are linear, measurements on multiple exposures can be combined at the catalog level by taking weighted sums of the individual moments.  This is true as long as each individual exposure is unaliased.  This greatly simplifies doing a muli-exposure measurement compared to other methods because there is no need to go back to the individual pixels.  
+
+For the coadd we need to have an accurate measure of the pixel noise power spectrum.  We can measure this directly from the coadded noise image for each object.
+
+We configure the BFD code to run with the following parameters:
+\begin{itemize}
+\item We use the '$k\sigma$' weight function as defined in \cite{Bernstein2016} Section 3.3.  The parameters are set to $N=4$ and $\sigma=1$.  We chose $\sigma$ to be slightly smaller here because it avoids the small bias seen in image simulations.  Other parameters were chosen to match those listed in the \galsim\ settings from Table 1 in \cite{Bernstein2016}.
+\item We simulated a deep dataset with the same settings, except the pixel noise was reduced by a factor of 100.
+\item We divide the data into two different regimes: $S/N$ 5-25 and 25-50.  We build a separate prior for each dataset.  For the higher range, we doubled measured moment noise to increase the overlap with the number of deep galaxies.
+\item A knowledge of the covariance matrix is currently necessary in order to build the prior moment distribution.  Previous studies have shown that if the noise varies more than $\sim 10\%$, we need to divide the data into different samples and construct a separate prior for each sample.  In this case, we saw that the variation in covariance was sufficiently small that we only needed to construct a single prior.
+\item The single epoch moments were weighted by the inverse variance of the flux moment when combined for the multi-epoch measurement.  
+\end{itemize}
+
+\subsection{Metacal}
+\label{Section:Metacal}
+
+Description here of metacal.
+
+\section{Simulation Results}
+\label{Section:Results}
+\subsection{Shear bias}
+We ran the BFD and metacal shear measurement code on our simulations in both multi-epoch measurements and on the coadded images. We summarize the results in table \ref{tab:results}.  It shows that there is no observable bias in either shear method when measuring the shear on the coadds.  
+
+There were we found during our analysis:
+\begin{itemize}
+\item The Monte Carlo noise images that we generated for each epoch were the same size as the galaxy postage stamp; 48 by 48 pixels.  If the size of the noise image is reduced we see a bias in the BFD results.\comment{Erin, would it be hard for you to test this?}  Reducing the noise image to 40 by 40 results in a $\sim 1\%$ bias and increases as you decrease the size.  Presumably, this comes from not having sufficient information to construct the power spectrum accurately on the final coadd.
+\item Initially, metacal required a very high order interpolation kernel (order 15) to remove a bias of a few percent in the shear.  We believe this came from noisy interpolations that caused a "smearing" of the image.  This smearing was not present in the PSF as they were centered in the middle of the postage stamp.  If instead we changed PSF so that it was interpolated in the same way as the image,s we found that the bias went away and we could use a lower order interpolation kernel.  This problem did not seem to effect the BFD method.  This is likely because we were making the same error in the deep reference set as in the images so this problem was being calibrated out.
+\item We tested what happens if there are large rotations.  We found no bias as long as the images were padded sufficiently to avoid corner effects.
+\end{itemize}
+
+\begin{table}
+\begin{tabular}{ll}
+\hline
+Sample & Measured bias \\ \hline
+BFD Coadd & $0.0012 \pm 0.0007$ \\
+BFD Multi-epoch & $-0.0014 \pm 0.0007$ \\
+Metacal Coadd & -  \\
+Metacal Multi-epoch & -  \\ \hline
+\end{tabular}
+\caption{The measured shear bias from simulations for BFD and metacal on both coadd and multi-epoch data.  These results show no statistically significant bias for any of the methods.}
+\label{tab:results}
+\end{table}
+
+\subsection{Shear S/N}
+
+We computed the S/N for both the multi-epoch and coadd cases to test if there was any loss in $S/N$ on the measured shear.  BFD saw no loss in $S/N$, while metacal saw a small effect of order 0.5$\%$.
+
+\section{S/N Loss from Rejecting Exposures}
+\label{Section:Exclusion}
+As mentioned above, in order to build a per-object coadd we must reject exposures where the edge of a CCD overlaps the object.  This will result in some loss of information from these rejected exposures.  We estimate how many exposures would be rejected for a typical object using a simulation of the LSST survey as described in \cite{LSSTSims}.  This simulation gives a nominal pointing for each exposure of the 10-year LSST survey.  We used the the baseline \textsc{OpSim} catalog \textsf{minion\_1016} to define the camera pointings.  By default the simulation does not provide a dithering strategy for different exposures of the same pointing.  Since the final dithering strategy is still under discussion in LSST, this gives us the option to try different strategies and test different metrics for difference science cases.  Therefore, we implemented a number of different dither strategies as provided by the LSST Metrics Analysis Framework (MAF) software \citep{LSSTSims}.  We found that the results had little dependence on which dithering strategy was chosen, therefore we will only show two representative dither patterns - a random offset for each visit and a spiral pattern. Fig.~\ref{fig:dither} shows the distribution of offsets for these two patterns.
+
+\begin{figure}
+    \includegraphics[width=0.5\textwidth]{Dither.png}
+    \caption{
+   Two different LSST dither patterns are show.  On the left each visit gets a random position and on the right a spiral pattern.  The green circle represents the approximate size of the LSST focal plane.  Each dot shows a separate offset from the nominal pointing.  The dots are restricted to within the blue hexagon for this study.
+    }
+    \label{fig:dither}
+\end{figure}
+
+To compute the number of missing exposures we might expect, we place 10,000 square patches of a particular size on the sky and calculate the number of visits that have a CCD edge that will cross each patch.  We can also calculate the reduced 5$\sigma$ point source depth for each patch.  Fig.~\ref{fig:dither} shows these values for three different patch sizes with side length 0.1, 0.5 and 0.8 arcminutes. Given these patch sizes, the fraction of rejected visits can vary from 3$\%$ to 20$\%$.  This emphasizes the fact that we must use small patches to avoid losing many visits.  
+
+To connect this with observations we need to know the typical object size in LSST.  In Fig.~\ref{fig:size}, we show the distribution of blend family sizes from the HSC Ultra-Deep\citep{SurveyOverview} data.  The HSC Ultra-Deep data is a good match for LSST because it has a depth of $\sim27.5$ which is comparable to the wide field LSST depth.  Note that this is not the size of single objects, but rather the size of objects that have been identified as coming from the same blend.  A blend is defined as objects that have been combined because contiguous pixels above threshold overlap.  The LSST software is fairly loose in combining nearby structures as it is fairly easy to "deblend" objects at large separations.  
+
+The blend sizes are computed from the bounding box of the above threshold pixels.  We use the square root of the area of the bounding box as a proxy for its size.  From the figure we can see that most objects have box sides of $~\sim 0.05$ which corresponds well with our patch side of 0.1 arcminutes.  We therefore conclude that a typical object therefore, will only suffer a small decrease in $S/N$ by rejecting visits that cross a CCD boundary.
+
+
+\begin{figure*}
+    \includegraphics[width=0.8\textwidth]{cell.png}
+    \caption{
+    Left: The fraction of exposures that will need to be rejected for different patch sizes and two different dither patterns.  Right:  The corresponding distribution of 5$\sigma$ depths for each patch.
+    }
+    \label{fig:dither}
+\end{figure*}
+
+
+\begin{figure}
+    \includegraphics[width=0.5\textwidth]{object_size.png}
+    \caption{
+    The distribution of the sizes of blended objects as derived from the HSC Ultra-Deep data.
+    }
+    \label{fig:size}
+\end{figure}
+
+
+\section{Summary}
+\label{Section:Summary}
+
+We have shown that we can reliably recover shear inference on coadded images derived from a suite of simulations.  We tested this with two different state of the art shear methods and they give consistent results.  There seems to be no bias or loss of information using the coadds.  The fact that we have shown this with two different methods gives support that is would be generally applicable to other shear methods as well.  The key issue seems to be that it be able to handle correlated noise correctly.  We have explictily assumed in this study that the coadded noise field is roughly constant over the size of an object.  The scale of noise variation will depend on the distortion, warping, etc. which could potentially change for different surveys.
+
+All these tests were done on simple inverse variance weighted coadds which are relatively easy to construct.  However, there are some cases where this approach may not be optimal.  For example, when doing star-galaxy separation using a straight coadd will likely degrade your results as the width of the PSF is smeared out by the poorer seeing images.  This may be the case where constructing optimal coadds would be a benefit.  Exporing this in more detail is beyond the scope of this work.  This approach also does not address the issue of detecting and characterizing moving objects.  It is likely that some form of multi-epoch fitting will be needed for this.
+
+The cost of applying this approach in real data is that epochs where objects cross CCD boundaries must be rejected from the coadd.  Each object or region of interest must construct a separate coadd.  These regions of interest must be "small" to avoid rejecting too many exposures.  We examined the typical size of blended regions from the HSC Ultra-Deep field and found that the number of visits we would reject for a survey like LSST is $< 5\%$.  This results in only a minor loss in limiting magnitude.  It is not clear however that a multi-epoch fitting algorithm could fully use these rejected visits as there can be numerous problems in modeling these galaxies on the edge of a CCD.
+
+
+\bibliographystyle{astroads}
+\bibliography{references}
+
+\appendix{S/N}
+
+\section{$S/N$ loss from Coaddition} \label{Section:FluxSN}
 
 Here we estimate the additional uncertainty in the measured flux when coadding,
 for the example of ``matched-filter'' photometry, where a linear fit is performed
@@ -109,21 +329,21 @@ background, so there is no signal in the covariance.
 
 For a set of $N$ images of the same sky, the data is the concatenation of the
 pixel values in each epoch, i.e., $\boldsymbol{d} = \{d_0, d_1, ..., d_n \}$.
-This allows the template $\boldsymbol{m}$ to be the concatentation of the
+This allows the template $\boldsymbol{m}$ to be the concatenation of the
 templates appropriate for each epoch, if for instance the PSF varies from
 exposure to exposure.
 
 Now suppose we coadd the images using a straight mean, such that $\langle
 \boldsymbol{d} \rangle = \frac{1}{N}\sum\limits_i d_i$, and the covariance
-matrix is $C_c = \frac{1}{N^2}\sum\limits_i C_i$.  The template
-$\boldsymbol{m}_{\rm c}$ is then the mean $\boldsymbol{m_c} = \frac{1}{N}\sum\limits_i m_i$
+matrix is $C_\coadd = \frac{1}{N^2}\sum\limits_i C_i$.  The template
+$\boldsymbol{m}_\coadd$ is then the mean $\boldsymbol{m}_\coadd = \frac{1}{N}\sum\limits_i m_i$
 and the resulting operation is:
 \begin{align}
-    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c}^T C_c^{-1} \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_{\rm c}^t C_c^{-1}\boldsymbol{m}_{\rm c}} 
+    \hat{A}_\coadd = \frac{\boldsymbol{m}_\coadd^T C_\coadd^{-1} \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_\coadd^t C_\coadd^{-1}\boldsymbol{m}_\coadd} 
 \end{align}
 with estimator variance
-\begin{align} \label{eq:coaddvarest}
-{\rm var}\hat{A}_{\rm c} = \frac{1}{\boldsymbol{m}_{\rm c}^T C_c^{-1}\boldsymbol{m}_{\rm c}},
+\begin{align} \label{eq:exact_var_coadd}
+{\rm var}\hat{A}_\coadd = \frac{1}{\boldsymbol{m}_\coadd^T C_\coadd^{-1}\boldsymbol{m}_\coadd},
 \end{align}
 where the indices in these expressions run over epochs. The multi-fitting
 method, by contrast, would use the optimal estimator for each epoch:
@@ -132,6 +352,7 @@ method, by contrast, would use the optimal estimator for each epoch:
 \end{align}
 with estimator variance
 \begin{align}
+\label{eq:exact_var_multi}
 {\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}.
 \end{align}
 
@@ -149,24 +370,24 @@ that the estimators become
 \begin{align}
     \hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i^T \boldsymbol{d}}{\sum\limits_i \boldsymbol{m}_i^T \boldsymbol{m}_i}&, ~~
     {\rm var}\hat{A}_{\rm multi} = \frac{\eta^2}{\sum\limits_i \boldsymbol{m}_i^T \boldsymbol{m}_i}\\
-    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c}^T \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_{\rm c}^T \boldsymbol{m}_{\rm c}}&, ~~
-    {\rm var}\hat{A}_{\rm c} = \frac{\eta^2/N}{\boldsymbol{m}_{\rm c}^T \boldsymbol{m}_{\rm c}}
+    \hat{A}_\coadd = \frac{\boldsymbol{m}_\coadd^T \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_\coadd^T \boldsymbol{m}_\coadd}&, ~~
+    {\rm var}\hat{A}_\coadd = \frac{\eta^2/N}{\boldsymbol{m}_\coadd^T \boldsymbol{m}_\coadd}
 \end{align}
 
 We now assume that the template for the coadd is related to that
 in the original images by perturbations due to small variations
 in a scale of the object $\sigma$:
 \begin{align}
-    \boldsymbol{m}_{\rm i} &= \boldsymbol{m}_{\rm c} + \Delta \boldsymbol{m}_i \\
-                           &\approx \boldsymbol{m}_{\rm c} + \frac{\partial \boldsymbol{m}_{\rm c}}{\partial \sigma} \Delta \sigma
+    \boldsymbol{m}_{\rm i} &= \boldsymbol{m}_\coadd + \Delta \boldsymbol{m}_i \\
+                           &\approx \boldsymbol{m}_\coadd + \frac{\partial \boldsymbol{m}_\coadd}{\partial \sigma} \Delta \sigma
 \end{align}
 The ratio of variances then becomes
 \begin{align} \label{eq:generalperturb}
-    \frac{ {\rm var} \hat{A}_{\rm c} }{{\rm var} \hat{A}_{\rm multi} } = 
-    1 + \frac{1}{N}\frac{\sum\limits_i \Delta \model_i^T \Delta \model_i }{\modelc^T \modelc} \approx 
-    1 + \frac{(\Delta \sigma)^2}{N}\frac{\sum\limits_i \left( \partial \modelc/\partial \sigma \right)_i^T \left( \partial \modelc/\partial \sigma \right)_i }{\modelc^T \modelc}
+    \frac{ {\rm var} \hat{A}_\coadd }{{\rm var} \hat{A}_{\rm multi} } &=  
+    1 + \frac{1}{N}\frac{\sum\limits_i \Delta \model_i^T \Delta \model_i }{\modelc^T \modelc} \\
+    & \approx 
+    1 + \frac{(\Delta \sigma)^2}{N}\frac{\sum\limits_i \left( \frac{\partial \modelc}{\partial \sigma} \right)_i^T \left( \frac{\partial \modelc}{\partial \sigma} \right)_i }{\modelc^T \modelc}
 \end{align}
-
 We further assume the template is a round Gaussian
 \begin{align}
     \modelc = \frac{1}{2 \pi \sigma^2} e^{-r^2/2 \sigma^2 }
@@ -178,7 +399,7 @@ with derivative
 For these gaussian models all terms in equation \ref{eq:generalperturb} can
 be readily calculated in the continuous limit, and we find
 \begin{align} \label{eq:varbasic}
-    \left( \frac{ {\rm var} \hat{A}_{\rm c} }{{\rm var} \hat{A}_{\rm multi} } \right)_{\rm toy} = 
+    \left( \frac{ {\rm var} \hat{A}_\coadd }{{\rm var} \hat{A}_{\rm multi} } \right)_{\rm toy} = 
     1 + 2 \left( \frac{\Delta \sigma}{\sigma} \right)^2
 \end{align}
 where $(\Delta \sigma)^2$ is to be interpreted as the rms variation
@@ -189,8 +410,8 @@ of large galaxies convolved by a PSF.  If the galaxy is a round Gaussian with
 size $\sigma_g$ and the PSF is a round Gaussian with size $\sigma_p$,
 and only the PSF size varies between images,
 we can use the chain rule to rewrite equation \ref{eq:varbasic} as
-\begin{align} \label{eq:vargal}
-    \left( \frac{ {\rm var} \hat{A}_{\rm c} }{{\rm var} \hat{A}_{\rm multi} } \right)_{\rm toy} &= 
+\begin{align} \label{eq:vargal_appendix}
+    \left( \frac{ {\rm var} \hat{A}_\coadd }{{\rm var} \hat{A}_{\rm multi} } \right)_{\rm toy} &= 
     1 + 2 \left( \frac{\sigma_p^2}{\sigma_g^2 + \sigma_p^2}\right)^2 \left( \frac{\Delta \sigma_p}{\sigma_p} \right)^2 \\
     &\equiv 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta \sigma_p}{\sigma_p} \right)^2
 \end{align}
@@ -203,277 +424,4 @@ Note that, for this toy model, the template is not exactly equal to the mean of
 the individual templates.  Thus we expect the toy model to slightly
 over-predict the increase in variance due to coaddition.
 
-\subsection{Monte-carlo Tests For Template Fluxes} \label{sec:toymc}
-
-We tested equation \ref{eq:vargal} using a simple monte-carlo simulation.  We
-used the \galsim\ package to generate images of Gaussian galaxies, convolved by
-Gaussian PSFs, and we used the \ngmix\ package
-\footnote{\url{https://github.com/esheldon/ngmix}} to fit the template flux.
-We used a PSF with FWHM=0.9 arcsec, with Gaussian variation between images
-of $\Delta \sigma_p/\sigma_p = 0.1$.
-
-All images were placed at the center of the image, so that no interpolation was
-required to coadd the images.  We used the same constant noise for all images,
-and used a simple straight mean for the coaddition process.
-
-The primary variable of interest is the resolution $R$.  We varied the
-size of the galaxy from zero, or star-like, to more than twice the PSF size,
-such that $R = 0.83$.
-
-The results are shown in figure \ref{fig:mcresults}.  The points are the
-measured values, which are predicted very well by the exact variance
-estimators, shown as the solid line.  Also shown are the predicted values from
-the toy model in equation \ref{eq:vargal}.  As expected, the toy model slightly
-over-predicts the increase in variance, but it is evidently useful for
-understanding how the effect scales with resolution.
-
-\begin{figure}
-    \centering
-    \includegraphics[]{{cnoise-fwhm0.90-frac0.10-ntrial100000}.pdf}
-
-    \caption{Measured and predicted values for the increased
-    uncertainty due to coaddition, for the Gaussian galaxies
-    and stars.  The points are
-    the measured values, and the solid line is the exact prediction.
-    The dashed line shows the simple toy model presented
-    in equation \ref{eq:vargal}.}
-
-	\label{fig:mcresults}
-
-\end{figure}
-
-%\citep{GALSIM2015}
-
-%\bibliographystyle{mn2e}
-% Bib database
-%\bibliography{apj-jour,astroref}
-
-\begin{comment}
-\appendix 
-
-\section{Toy Example} \label{sec:toy}
-
-This needs to be rewritten, since it actually is the affect of a noisy template.
-
-Here we estimate the additional uncertainty in the measured flux when coadding,
-for the example of ``matched-filter'' photometry.  A key to this derivation is
-the assumption that the variation in PSF sizes is small relative to the mean
-PSF size.  We will also assume that the PSF and object are round Gaussians,
-which makes the math tractable.
-
-First, let's consider an optimal estimator for a single unknown parameter that
-is linear in the observables. Let the model $\boldsymbol{M}$ be $\boldsymbol{M}
-= A\boldsymbol{m}$, where $A$ is a scalar amplitude and $\boldsymbol{m}$ is a
-normalized signal model, or template. Then the log-likelihood for $A$ (assuming
-a Gaussian signal likelihood) and some data vector $\boldsymbol{d}$ is
-\begin{align}
-  \log L = - (\boldsymbol{d} - A\boldsymbol{m})^T\: C^{-1} (\boldsymbol{d} - A\boldsymbol{m}) - \frac{1}{2} \det(2\pi C )
-\end{align}
-where $C$ is the noise covariance. The optimal estimator $\hat{A}$ is the value
-that maximizes this expression for $A$. With some algebra, it can be shown that
-this value is:
-\begin{align}
-\hat{A} = \frac{\boldsymbol{m}^T C^{-1} \boldsymbol{d}}{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}
-\end{align}
-and that the variance of $\hat{A}$ is
-\begin{align}
-{\rm var}\hat{A} = \frac{1}{{\boldsymbol{m}^T C^{-1} \boldsymbol{m}}}
-\end{align}
-
-In the case of photometry, $\boldsymbol{m}$ is the normalized profile of the
-star or galaxy, $A$ is the measured flux, and $\boldsymbol{d}$ is the set of
-pixels on which the measurement will be made.
-
-For a set of $n$ images of the same sky, the data is the concatenation of the
-pixel values in each epoch, i.e., $\boldsymbol{d} = \{d_0, d_1, ..., d_n \}$.
-This allows the template $\boldsymbol{m}$ to be the concatentation of the
-templates appropriate for each epoch, if for instance the PSF varies from
-exposure to exposure.
-
-Now suppose we coadd the images, such that $\langle \boldsymbol{d} \rangle = \frac{1}{N}\sum\limits_i
-d_i$, and the covariance matrix is $C_c^{-1} = \sum\limits_i C_i^{-1}$.
-The template $\boldsymbol{m}_{\rm c}$ is then the mean $\langle
-\boldsymbol{m}_i\rangle$, and the resulting operation is:
-\begin{align}
-    \hat{A}_{\rm c} = \frac{\boldsymbol{m}_{\rm c}^T C_c^{-1} \langle \boldsymbol{d} \rangle}{\boldsymbol{m}_{\rm c}^t C_c^{-1}\boldsymbol{m}_{\rm c}} 
-\end{align}
-with estimator variance
-\begin{align} \label{eq:coaddvarest}
-{\rm var}\hat{A}_{\rm c} = \frac{1}{\boldsymbol{m}_{\rm c}^T C_c^{-1}\boldsymbol{m}_{\rm c}},
-\end{align}
-where the indices in these expressions run over epochs. The multi-fitting
-method, by contrast, would use the optimal estimator for each epoch:
-\begin{align}
-\hat{A}_{\rm multi} = \frac{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{d}_i}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}
-\end{align}
-with estimator variance
-\begin{align}
-{\rm var}\hat{A}_{\rm multi} = \frac{1}{\sum\limits_i \boldsymbol{m}_i^T C_i^{-1}\boldsymbol{m}_i}.
-\end{align}
-
-We can re-write the data for each image as:
-\begin{align}
-    \boldsymbol{d}_{\rm i} &= A \boldsymbol{m}_i + \boldsymbol{\epsilon}_i\\
-    &= A \boldsymbol{m_c} + A \Delta\boldsymbol{ m}_i + \boldsymbol{\epsilon}_i
-\end{align}
-where $\boldsymbol{\epsilon}_i$ is the pixel noise and, by definition,
-$\langle\Delta\boldsymbol{m}_i\rangle= 0$. The expression for the coadd
-estimator then becomes:
-\begin{align}
-    \hat{A} &= A + A \frac{\boldsymbol{m}_c^T C_c^{-1} \langle \Delta \boldsymbol{m} \rangle}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} 
-              + \frac{\boldsymbol{m}_c^T C_c^{-1} \langle \boldsymbol{\epsilon} \rangle}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c}.
-\end{align}
-The second and third terms average to zero, showing the estimator is unbiased.  However,
-there is additional variance due to the $\langle\Delta\boldsymbol{m}_i\rangle$ term. We can
-calculate the actual variance of this estimator
-\begin{align}
-    {\rm var}\hat{A} &= \Bigl< (A - \hat{A})^2 \Bigr>
-\end{align}
-Which we can write in terms of an outer product
-\begin{align}
-    {\rm var}\hat{A} &= \frac{1}{N} (A - \hat{A}) (A - \hat{A})^T \\
-        &= \frac{1}{N} \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
-              + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)
-              \left(A \frac{\boldsymbol{m}_c C_c^{-1} \Delta \boldsymbol{m}}{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c} 
-              + \frac{\boldsymbol{m}_c C_c^{-1} \boldsymbol{\epsilon} }{\boldsymbol{m}_c C_c^{-1}\boldsymbol{m}_c}\right)^T
-\end{align}
-The cross-terms will vanish in the average, and the term involving $\boldsymbol
-\epsilon$ results in the standard variance estimate given in equation
-\ref{eq:coaddvarest}. Thus the full variance is
-\begin{align} 
-    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c}  \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)  \left(\boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \right)^T \Bigr] \\
-        &= {\rm var}\hat{A_c} \Bigl[ 1 + \frac{1}{N}\frac{A^2}{\boldsymbol{m}_c^T C_c^{-1}\boldsymbol{m}_c} \boldsymbol{m}_c^T C_c^{-1} \Delta \boldsymbol{m} \Delta \boldsymbol{m}^T  C_c^{-1} \boldsymbol{m}_c  \Bigr],
-\end{align}
-where we have used the rules of transposition and the fact that the covariance matrix is symmetric.
-
-We now depart from generality in order to simplify the calculations.  We assume
-the noise for all images has the same value $\eta$. We further assume that the covariance
-matrix is diagonal; this assumption will break down in true coadds due to
-interpolation.  We further assume that the $\Delta \boldsymbol{m}_i$ are small,
-and that the variations are due to the variation of the object
-scale $\sigma$
-\begin{align}
-    \Delta \boldsymbol{m} = \frac{\partial \boldsymbol{m}}{\partial \sigma} \Delta \sigma
-\end{align}
-The variance can then be written
-\begin{align}
-    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N}\frac{A^2}{\eta^2} \frac{\Delta \sigma^2}{\boldsymbol{m}_c^T \boldsymbol{m}_c} \boldsymbol{m}_c^T  \frac{\partial \boldsymbol{m}}{\partial \sigma} \frac{\partial \boldsymbol{m}}{\partial \sigma}^T  \boldsymbol{m}_c  \Bigr]
-\end{align}
-We will also assume the images are round gaussians with size $\sigma$, such that
-\begin{align}
-    \boldsymbol{m} = \frac{1}{2 \pi \sigma^2} e^{-r^2/2 \sigma^2 }
-\end{align}
-For this model, the derivatives can be calculated directly
-\begin{align}
-    \frac{\partial \boldsymbol{m}}{\partial \sigma} &= \frac{1}{2 \pi \sigma^2} \frac{2}{\sigma} e^{r^2/2 \sigma^2} \Bigl( \frac{1}{2}\frac{r^2}{\sigma^2} - 1 \Bigr) \\
-    &\equiv \frac{1}{2 \pi \sigma^2} \frac{2}{\sigma} \boldsymbol{F}
-\end{align}
-We can also calculate $\boldsymbol{m}^T \boldsymbol{m} = 1/4 \pi \sigma^2$. We
-can now rewrite the variance as
-\begin{align}
-    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{16}{N}\frac{A^2}{4 \pi \sigma^2 \eta^2} \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \boldsymbol{m}_c^T  \boldsymbol{F} \boldsymbol{F}^T \boldsymbol{m} \Bigr]
-\end{align}
-The term $A^2/4 \pi \sigma^2 \eta^2$ is equal to the square of 
-the native signal-to-noise
-ratio of the coadd measurement based on the variance in equation \ref{eq:coaddvarest}.
-Additional, the quantity $\boldsymbol{m}_c^T  \boldsymbol{F} \boldsymbol{F}^T \boldsymbol{m}$
-is identically equal to the value $1/16$.  Thus our final estimate of the variance is
-\begin{align} \label{eq:varbasic}
-    {\rm var}\hat{A} = {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N} \left( \frac{S}{N} \right)^2 \Bigl( \frac{\Delta \sigma}{\sigma} \Bigr)^2 \Bigr]
-\end{align}
-
-We see that the additional variance due to PSF size variations is important
-at relatively high \snr.  For example, if the fractional variation of
-the size is 0.1, and there are 10 images used for the coadd process,
-the additional uncertainty (the square root of the variance)
-is 10\% at \snr=15.
-
-We expect the increase in variance to be less for galaxies that
-are larger than the PSF.  If the galaxy is a round Gaussian with
-size $\sigma_g$ and the PSF is a round Gaussian with size $\sigma_p$,
-and only the PSF size varies between images,
-we can use the chain rule to rewrite equation \ref{eq:varbasic} as
-\begin{align} \label{eq:vargal}
-    {\rm var}\hat{A} &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N} \left( \frac{S}{N} \right)^2 \Bigl(\frac{\sigma_p^2}{\sigma_p^2 + \sigma_g^2} \Bigr)^2 \Bigl( \frac{\Delta \sigma_p}{\sigma_p} \Bigr)^2 \Bigr] \\
-     &= {\rm var}\hat{A_c} \Bigl[ 1 + 
-        \frac{1}{N} \left( \frac{S}{N} \right)^2 \Bigl(1 - R \Bigr)^2 \Bigl( \frac{\Delta \sigma_p}{\sigma_p} \Bigr)^2 \Bigr],
-\end{align}
-where we have used the definition of the resolution factor $R =
-\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$.  This confirms our
-intuition that measurements of large galaxies, with $R \sim 1$ will suffer
-only a small increase in variance.
-
-\subsection{Monte-carlo Tests of the Toy Example} \label{sec:toymc}
-
-We tested equation \ref{eq:vargal} using a simple monte-carlo simulation.  We
-used the \galsim\ package to generate images of Gaussian galaxies, convolved by
-Gaussian PSFs, and we used the \ngmix\ package
-\footnote{\url{https://github.com/esheldon/ngmix}} to fit the template flux.
-We used a PSF with FWHM=0.9 arcsec, with Gaussian variation between images
-of $\Delta \sigma_p/\sigma_p = 0.1$.
-
-All images were placed at the center of the image, so that no interpolation was
-required to coadd the images.  We used the same constant noise for all images,
-and used a simple straight mean for the coaddition process.
-
-The primary variables of interest are the signal-to-noise ratio \snr\ and the
-galaxy size relative to the PSF, or equivalently resolution $R$.  We varied the
-size of the galaxy from zero, or star-like, to more than twice the PSF size,
-such that$R = 0.83$. We varied the the \snr\ from $\sim 6$ to $\sim 60$.
-
-
-When fitting, the coadd template was taken to be the best fit gaussian, rather
-than the exact coadded template from the individual gaussian images.  As we
-will see below, this may introduce some small additional variance.
-
-The results are shown in figure \ref{fig:mcresults}.  The unfilled symbols
-are the measurement of
-\begin{align}
-    \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A_c}} },
-\end{align}
-in other words, the increase in uncertainty over the
-naive estimator.  The filled circles show the increased
-uncertainty relative to the {\em measured} uncertainty using
-the optimal multi-epoch estimator.
-\begin{align}
-    \sqrt{ \frac{ {\rm var}\hat{A}} { {\rm var}\hat{A}^{\rm meas}_{\rm multi} } },
-\end{align}
-Where the "meas" superscript indicates this is measured, not
-calculated from the variance estimator.
-Overplotted
-as lines are the predicted values from equation \ref{eq:vargal}.
-
-\begin{figure}
-    \centering
-    \includegraphics[]{{cnoise-fwhm0.90-frac0.10-ntrial100000}.pdf}
-
-    \caption{Measured and predicted values for the increased
-    uncertainty due to coaddition, for the toy Gaussian model
-    presented in section \ref{sec:toy}.  The points are
-    two different measures of the increased uncertainty (see \S \ref{sec:toymc})
-    and the lines are the prediction.}
-
-	\label{fig:mcresults}
-
-\end{figure}
-
-
-We see that for stars and small galaxies with with $R \sim 0$, there is a 20\%
-increase in at \snr$\sim 20$.  But for large and relatively low \snr\ galaxies
-the increase in variance can be relatively minor even at \snr=60.
-
-Note also that, in the monte-carlo, we assumed the coadd was a Gaussian, which
-is not quite correct.  This explains why the unfilled symbols, based on the
-naive analytic coadd variance prediction, are slightly lower than the filled
-circles from the measured variance of the optimal estimator:  there is some
-additional variance due to using a slightly wrong template.
-
-\end{comment}
-
 \end{document}
-
