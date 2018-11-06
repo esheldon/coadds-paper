@@ -49,6 +49,7 @@
 \newcommand{\comment}[1]{{\textcolor{cyan}{#1}}}
 
 \newcommand{\mcal}{\textsc{metacalibration}}
+\newcommand{\Mcalshort}{\textsc{metacal}}
 \newcommand{\Mcal}{\textsc{Metacalibration}}
 \newcommand{\vest}{\mbox{\boldmath $e$}}
 \newcommand{\est}{e}
@@ -154,7 +155,7 @@ coadds of the image, PSF and the noise.  We test this proposal by looking at
 the measured shear bias on simulations of both multi-epoch and coadd data.  
 Section \ref{Section:Simulation} describes the setup and properties of the 
 simulations.  We test two separate shear measurement pipelines: BFD and 
-Metacalibration.  We summarize how these algorithms were configured and applied 
+\Mcal.  We summarize how these algorithms were configured and applied 
 in Section \ref{Section:Measurement}.  Section \ref{Section:Results} shows the 
 results of these methods.  We show that for both shear methods, we are able to 
 recover unbiased results.  The advantage of running more than one algorithm 
@@ -480,48 +481,59 @@ to correct for shear-dependent selection effects \citep{SheldonHuff2017}.
 The convolutions and shears applied to the images result in correlated noise
 that can bias the shear estimate. We apply a simple empirical correction. We
 generate a noise image with the same amplitude as the noise in the real data,
-and the same shape as the original image.  We apply \mcal\ shearing and
-convolution operations.  We then rotate this field by 90 degrees and add it to
-the image of the object before performing a measurement, which cancels the
-correlated noise bias in the ensemble measurement \citep{SheldonHuff2017}.
+and the same shape as original image.  We rotate the noise image by 90 degrees.
+We apply \mcal\ shearing and convolution operations.  We then rotate this field
+back by 90 degrees and add it to the image of the object before performing a
+measurement. This cancels the correlated noise bias in the ensemble shear
+measurement \citep{SheldonHuff2017}.
 
 Coaddition involves interpolation of the images, which introduces additional
 correlated noise.  This can be dealt with in the same correlated noise
-correction scheme.  We generate noise images as described above, and pass them
-through coaddition, thus incorporating correlated noise due to interpolation.
-We then pass these images through the shearing and convolution operations and
-make the empirical correlated noise correction.
+correction scheme.  We generate noise images as described above, but pass them
+through coaddition before passing them through the convolution and shearing
+operations.
 
 
 \section{Simulation Results}
 \label{Section:Results}
 
-\subsection{Shear bias}
-We ran the BFD and metacal shear measurement code on our simulations in both 
-multi-epoch measurements and on the coadded images. We summarize the results in 
-table \ref{tab:results}.  It shows that there is no observable bias in either 
-shear method when measuring the shear on the coadds.  
-There were we found during our analysis:
+\subsection{Shear bias} We ran the BFD and \mcal\ shear measurement codes on
+our simulations in both multi-epoch measurements and on the coadded images. For
+\mcal\ we made cuts that the object have \snr$ > 10$ and square size relative
+to the PSF of $T/T_{\mathrm{PSF}} > 0.5$.  For BFD we made cuts XXX.  We
+applied corrections for selection effects in both methods.  We summarize the
+results in table \ref{tab:results}.  Each measurement was performed on
+independent simulations, so the errors are uncorrelated.  These results show
+that there is no additional bias in either shear method when measuring the
+shear on the coadds.  We note additional findings from our
+analysis: 
 
 \begin{itemize}
-\item The Monte Carlo noise images that we generated for each epoch were the 
-same size as the galaxy postage stamp; 48 by 48 pixels.  If the size of the 
-noise image is reduced we see a bias in the BFD results.\comment{Erin, would it 
-be hard for you to test this?}  Reducing the noise image to 40 by 40 results in 
-a $\sim 1\%$ bias and increases as you decrease the size.  Presumably, this 
-comes from not having sufficient information to construct the power spectrum 
-accurately on the final coadd.
-\item Initially, metacal required a very high order interpolation kernel (order 
-15) to remove a bias of a few percent in the shear.  We believe this came from 
-noisy interpolations that caused a "smearing" of the image.  This smearing was 
-not present in the PSF as they were centered in the middle of the postage 
-stamp.  If instead we changed PSF so that it was interpolated in the same way 
-as the image,s we found that the bias went away and we could use a lower order 
-interpolation kernel.  This problem did not seem to effect the BFD method.  
-This is likely because we were making the same error in the deep reference set 
-as in the images so this problem was being calibrated out.
-\item We tested what happens if there are large rotations.  We found no bias as 
-long as the images were padded sufficiently to avoid corner effects.
+
+\item The Monte Carlo noise images that we generated for each epoch were the
+same size as the galaxy postage stamp; 48 by 48 pixels.  If the size of the
+noise image is reduced we see a bias in the BFD results.  Reducing the noise
+image to 40 by 40 results in a $\sim 1\%$ bias and increases as you decrease
+the size.  Presumably, this comes from not having sufficient information to
+construct the power spectrum accurately on the final coadd.  Note \mcal\
+has a strict requirement that noise image must be at least as large as the
+original image.
+
+\item Initially, \mcal\ required a very high order interpolation kernel (order
+15) to remove a bias of a few percent in the shear.  We believe this came from
+noisy interpolations that caused a ``smearing'' of the image.  This smearing
+was different from that present in the PSF image, as the PSFs were initially
+centered in the middle of the postage stamp.  If instead we offset the PSFs so
+that it was interpolated in the same way as the object images during
+coaddition, we found that the bias went away and we could use a lower order
+interpolation kernel.  This problem did not seem to effect the BFD method.
+This is likely because in BFD we making the same error in the deep reference
+set as in the shallow images, so this problem was being calibrated out.
+
+\item We tested coadds created from original images that had large random
+rotations.  We found no additional bias, as long as the images were padded
+sufficiently to avoid corner effects.
+
 \end{itemize}
 
 \begin{table}
@@ -530,19 +542,20 @@ long as the images were padded sufficiently to avoid corner effects.
 Sample & Measured bias \\ \hline
 BFD Coadd & $0.0012 \pm 0.0007$ \\
 BFD Multi-epoch & $-0.0014 \pm 0.0007$ \\
-Metacal Coadd & -  \\
-Metacal Multi-epoch & -  \\ \hline
+\mcal\ Coadd & $0.0007 \pm 0.0004$  \\
+\mcal\ Multi-epoch & $0.0004 \pm 0.0004$  \\ \hline
 \end{tabular}
-\caption{The measured shear bias from simulations for BFD and metacal on both 
+\caption{The measured shear bias from simulations for BFD and \mcal\ on both 
 coadd and multi-epoch data.  These results show no statistically significant 
-bias for any of the methods.}
+bias for any of the methods beyond that expected from the breakdown
+of the weak shear approximation ($\sim 0.0005$).}
 \label{tab:results}
 \end{table}
 
 \subsection{Shear S/N}
 We computed the S/N for both the multi-epoch and coadd cases to test if there 
 was any loss in $S/N$ on the measured shear.  BFD saw no loss in $S/N$, while 
-metacal saw a small effect of order 0.5$\%$.
+\mcal\ saw a small effect of order 0.5$\%$.
 
 \section{S/N Loss from Rejecting Exposures}
 \label{Section:Exclusion}
