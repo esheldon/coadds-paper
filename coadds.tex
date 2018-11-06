@@ -170,15 +170,18 @@ scenario of using a simple weighted mean.
 
 \subsection{Image Registration and Noise}
 \label{Subsection:Registration}
-\begin{figure*}
-\includegraphics[width=0.65\textwidth]{CoaddNoise.png}
+%\begin{figure*}
+\begin{figure}
+%\includegraphics[width=0.65\textwidth]{CoaddNoise.png}
+%\includegraphics[width=\columnwidth]{CoaddNoise.png}
 \caption{
 The variance map from a random location from the HSC DR1 survey.  Darker colors 
 indicate lower variance or a larger number of visits.  This map is constructed 
 by coadding all the variance maps of the individual epochs.
 }
 \label{fig:noise}
-\end{figure*}
+\end{figure}
+%\end{figure*}
 
 In order to coadd, we must account for the actual pointing of each image and 
 the local distortion caused by the optics, atmosphere, etc.  This requires 
@@ -240,36 +243,47 @@ reconstructed.  We discuss the loss of depth from rejecting these visits in
 
 \subsection{Expected Flux $S/N$ loss}
 \label{Subsection:FluxSN}
-To gain some intuition, we derive the functional form of the expected loss in 
-$S/N$ for a toy model due to coaddition relative to multi-epoch.  For the toy 
-model we use data that follows a circular Gaussian and are only interested in 
-measuring the flux, $A$, of the model.  In this case we can analytically 
-compute the uncertainty in the estimated flux, $\hat{A}$, from a linear fit to 
-the data.  In Appendix \ref{Subsection:FluxSN}, we show that the ratio of the 
-flux variance derived from the coadd to that from fitting the epochs 
-simultaneously is:
 
+
+For the simple weighted mean coadds used in this work, we expect measurements
+on a coadd to be noisier than those using optimal multi-epoch fitting when the
+size of the PSF varies between epochs.  We expect the increase in noise to be
+larger for smaller objects such as stars and distant galaxies, the images of
+which are more affected by the PSF.
+
+To gain some intuition, we derive the functional form of the expected loss in
+$S/N$ for the case of a linear fit for the amplitide $A$ of a template, or
+``matched filter''.  In this case we can analytically compute the uncertainty
+in the estimated flux, $\hat{A}$, from a linear fit to the data (see Appendix
+\ref{Subsection:FluxSN}). It is also useful to introduce a ``toy model'', which
+illustrates the main features of this process.  For the toy model we use data
+that follows a circular Gaussian, which makes the calculations easier and
+allows introduction of useful approximations.
+
+In Appendix \ref{Subsection:FluxSN} we show that, for the toy model and small
+variations in the PSF size, the ratio of the flux variance derived from the
+coadd to that from fitting the epochs simultaneously is approximately:
 \begin{align} \label{eq:vargal}
 \left( \frac{ {\rm var} \hat{A}_\coadd}{{\rm var} \hat{A}_{\rm multi} } 
 \right) &
 \approx 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta 
 \sigma_p}{\sigma_p} \right)^2,
 \end{align}
+where $\sigma_p$ is the PSF size, $\Delta \sigma_p$ is the RMS scatter in PSF
+size, and $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$ is the ratio of the galaxy
+size, $\sigma_g$, to the PSF size.  This result shows the increased variance is
+proportional to the resolution, $R$, and the relative variation in PSF size
+$(\Delta \sigma_p/\sigma_p)^2$.  For a large galaxy $R$ is near unity and for a star
+$R$ is near zero, so as expected the effect is largest for stars.  In cases where there
+are significant PSF variations of order 1, the variance could be increased by a
+factor of 2 or three for star-like objects.  However, most current and future
+surveys have significantly less PSF variation than this, on the order of 0.1.
 
-where $\sigma_p$ is the PSF size, $\Delta \sigma_p$ is the RMS scatter in PSF 
-size, and $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$ is the ratio of the galaxy 
-size, $\sigma_g$, to the PSF size.  This result shows the increased variance is 
-proportional to the resolution, $R$, and the variation in PSF size.  For a 
-large galaxy $R$ moves toward 1 and a star is near zero, therefore the effect 
-is largest on stars.  In cases where there are significant PSF variations of 
-order 1, the variance could be increased by a factor of 2 or three for 
-star-like objects.  However, most current and future surveys have significantly 
-less PSF variation than this, on the order of 0.1. 
-We tested the validity of equation \ref{eq:vargal} using a simple Monte Carlo 
-simulation.  We used the \galsim\ package to generate images of Gaussian 
-galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package 
-\footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used 
-a PSF with FWHM=0.9 arcsec, with Gaussian variation between images of $\Delta 
+We tested the validity of equation \ref{eq:vargal} using a simple Monte Carlo
+simulation.  We used the \galsim\ package to generate images of Gaussian
+galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package
+\footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used
+a PSF with FWHM=0.9 arcsec, with Gaussian variation between images of $\Delta
 \sigma_p/\sigma_p = 0.1$.
 
 All images were placed at the center of the image, so that no interpolation was 
@@ -281,7 +295,7 @@ from zero, or star-like, to more than twice the PSF size, such that $<R> =
 are shown in Figure \ref{fig:mcresults}.  The points are the measured values 
 and the solid line are the exact variance estimators from 
 \ref{eq:exact_var_coadd} and \ref{eq:exact_var_mult}.  The dotted lines are the 
-values predicted values from the toy model in equation \ref{eq:vargal}.  We can 
+predicted values from the toy model in equation \ref{eq:vargal}.  We can 
 see that the toy model slightly over-predicts the increase in variance, but is 
 still evidently useful for understanding how the effect scales with resolution. 
 For a given survey we can use this to predict the effect that coaddition will 
@@ -523,15 +537,18 @@ $~\sim 0.05$ which corresponds well with our patch side of 0.1 arcminutes.  We
 therefore conclude that a typical object therefore, will only suffer a small 
 decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 
-\begin{figure*}
-\includegraphics[width=0.8\textwidth]{cell.png}
+%\begin{figure*}
+\begin{figure}
+%\includegraphics[width=0.8\textwidth]{cell.png}
+\includegraphics[width=\columnwidth]{cell.png}
 \caption{
 Left: The fraction of exposures that will need to be rejected for different 
 patch sizes and two different dither patterns.  Right:  The corresponding 
 distribution of 5$\sigma$ depths for each patch.
 }
 \label{fig:dither}
-\end{figure*}
+%\end{figure*}
+\end{figure}
 
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{object_size.png}
