@@ -638,40 +638,42 @@ Ultra-Deep data.
 
 \section{Summary}
 \label{Section:Summary}
-We have shown that we can reliably infer weak lensing shear on coadded images 
-using two state-of-the art shear techniques, BFD and \mcal.  For these tests
-we used a suite of simulations.  We see minimal loss of
-loss of information using non-optimal weighted mean coadds for relatively
-small PSF size variations.  The fact that we have shown 
-this with two different methods gives support that is could be generally 
-applicable to other shear methods as well.
 
-We identify the key issue for recovering accurate shear is careful handling of
-the correlated noise that arised due to coaddition.  We have explictily assumed
-in this study that the coadded noise field is roughly constant over the size of
-an object.  The scale of noise variation will depend on the distortion,
+We have shown that we weak lensing shear can be reliably inferred using coadded
+images.  We tested two state-of-the art shear techniques, BFD and \mcal, and in
+both cases we detected no additional bias due to coaddition.  We see minimal
+loss of loss of information using non-optimal weighted mean coadds for the case
+of relatively small PSF size variations (of order ten percent).  The two shear
+inference methods are quite different, lending support to the notion that the
+use of coadds may be possible for other methods as well.
+
+The key issue for recovering accurate shear is careful handling of the
+correlated noise that arises during the coaddition process.  We have explictily
+assumed in this study that the coadded noise field is roughly constant over the
+size of an object.  The scale of noise variation will depend on the distortion,
 warping, etc. which could potentially change for different surveys.
 
 These tests were done on simple inverse variance weighted coadds which are
 relatively easy to construct.  However, there are some cases where this
-approach may not be optimal.  For example, such simple coadds will likely
-degrade the ability to perform precise star-galaxy separation, as the width of
-the coadd PSF is necessarily larger than that of the best input images.  In
-this case there is  clear benfit to constructing optimal coadds.  Exploring this
-in more detail is beyond the scope of this work.
+approach may not be optimal.  For example, use such simple coadds will likely
+somewhat degrad the ability to classify stars and galaxies, as the width of the
+coadded PSF is necessarily larger than that of the best input images.  In this
+case there is  clear benfit to constructing optimal coadds.  Exploring this in
+more detail is beyond the scope of this work.
 
 We did not address the issue of detecting and characterizing moving objects.
 It is likely that some form of multi-epoch fitting will be needed for this.
 
 The cost of applying our approach to real data is that epochs where objects
-cross CCD boundaries must be rejected from the coadd.  Each object or region of
-interest must construct a separate coadd.  These regions of interest must be
-relatively small to avoid rejecting too many exposures.  We examined the typical size
-of blended regions from the HSC Ultra-Deep field and found that the number of
-visits we would reject for a survey like LSST is $< 5\%$.  This results in only
-a minor loss in limiting magnitude.  It is not clear however that a multi-epoch
-fitting algorithm could fully use these rejected visits as there can be
-numerous problems in modeling these galaxies on the edge of a CCD.
+cross CCD boundaries must be rejected from the coadd, in order to preserve the
+continuity of the PSF.  Each object or region of interest must construct a
+separate coadd.  These regions of interest must be relatively small to avoid
+rejecting too many exposures.  We examined the typical size of blended regions
+from the HSC Ultra-Deep field and found that the number of visits we would
+reject for a survey like LSST is $< 5\%$.  This results in only a minor loss in
+limiting magnitude.  It is not clear however that a multi-epoch fitting
+algorithm could fully use these rejected visits as there can be numerous
+problems in modeling these galaxies on the edge of a CCD.
 
 XXX Given the shear-dependent detection bias I've recently discovered, it is
 likely we will need larger ``coadds in cells'', which will necessarily involve
