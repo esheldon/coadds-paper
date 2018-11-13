@@ -246,7 +246,7 @@ of a detector in any epoch.  Given this, it can be difficult to construct a
 model on the coadd.  An alternative approach used by 
 \cite{Jee2016,Mandelbaum2018} is to create a valid coadded PSF by resampling 
 and interpolating the single epoch PSFs in the same way as the images 
-\cite(DLS, HSC).  This avoids any problems of having to spatially interpolate a 
+\cite{DLS, HSC}.  This avoids any problems of having to spatially interpolate a 
 complex PSF model.  However, objects that include an epoch which crosses a 
 detector boundary will pose a problem ,as the PSF is not be well defined.  For 
 HSC DR1, objects that contained such a boundary image were flagged and 
@@ -614,8 +614,8 @@ can vary from 3$\%$ to 20$\%$.  This emphasizes the fact that we must use small
 patches to avoid losing many visits.  
 To connect this with observations we need to know the typical object size in 
 LSST.  In Fig.~\ref{fig:size}, we show the distribution of blend family sizes 
-from the HSC Ultra-Deep\citep{SurveyOverview} data.  The HSC Ultra-Deep data is 
-a good match for LSST because it has a depth of $\sim27.5$ which is comparable 
+from the HSC Ultra-Deep~\citep{SurveyOverview} data.  The HSC Ultra-Deep data is 
+a good match for LSST because it has a depth of $\sim 27.5$ which is comparable 
 to the wide field LSST depth.  Note that this is not the size of single 
 objects, but rather the size of objects that have been identified as coming 
 from the same blend.  A blend is defined as objects that have been combined 
