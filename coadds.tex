@@ -21,6 +21,7 @@
 \newcommand\notewrite[1]{\todo[color=orange, inline, size=\small]{To write: #1}}
 \newcommand\noteask[1]{\todo[color=cyan, inline, size=\small]{To ask: #1}}
 \newcommand\notecontrib[1]{\todo[color=green, inline, size=\small]{Contributors: #1}}
+\newcommand\rachel[1]{\todo[color=yellow, inline, size=\small]{Rachel: #1}}
 \newcommand{\vecM}{\mbox{\boldmath $M$}}
 \newcommand{\vecg}{\mbox{\boldmath $g$}}
 \newcommand{\vece}{\mbox{\boldmath $e$}}
@@ -85,6 +86,10 @@ or degradation in performance for two independent shear estimators.  The one
 caveat to working on coadds, is that we must remove images that overlap a CCD 
 boundary, as the PSF is not well defined.  We estimate that the number of 
 epochs that must be rejected for a survey like LSST is on the order of $\sim 3\%$.
+\rachel{One concept I would recommend introducing already in the abstract is that the above
+  statements presume use of a principled coaddition algorithm (with a mathematically well-defined
+  PSF).  I also recommend giving some numbers for how well biases in shear were constrained given the
+sims that were run, i.e., saying that biases were undetectable at the X\% level. }
 \end{abstract}
 
 \section{Introduction}
@@ -192,6 +197,7 @@ scenario of using a simple weighted mean.
 The variance map from a random location from the HSC DR1 survey.  Darker colors 
 indicate lower variance or a larger number of visits.  This map is constructed 
 by coadding all the variance maps of the individual epochs.
+\rachel{No actual figure here?}
 }
 \label{fig:noise}
 \end{figure}
@@ -321,8 +327,11 @@ to be quite small, especially for galaxys.
 \caption{Measured and predicted values for the increased uncertainty due to 
 coaddition, for the Gaussian galaxies and stars.  The points are the measured 
 values from simulations, and the solid line is the exact prediction from 
-equations in Appendex \ref{Section:FluxSN}.  The dashed line shows the simple 
-toy model presented in equation \ref{eq:vargal}.}
+equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows the simple 
+toy model presented in equation \ref{eq:vargal}.
+\rachel{Caption does not make clear what is the horizontal axis.  Also, uncertainty in what?  It's
+  not clear from context -- uncertainty in flux or shape or \dots?  Finally, I recommend slightly
+  increasing the font size on the tick labels and legend to match the font size in the paper.}}
 \label{fig:mcresults}
 \end{figure}
 
@@ -585,11 +594,12 @@ offsets for these two patterns.
 \begin{figure}
 \includegraphics[width=0.5\textwidth]{Dither.png}
 \caption{
-Two different LSST dither patterns are show.  On the left each visit gets a 
+Two different LSST dither patterns are shown.  On the left each visit gets a 
 random position and on the right a spiral pattern.  The green circle represents 
 the approximate size of the LSST focal plane.  Each dot shows a separate offset 
 from the nominal pointing.  The dots are restricted to within the blue hexagon 
-for this study.
+for this study. \rachel{Give some reference for where these dither patterns are defined.  Also, the
+  aspect ratio seems a bit funny?}
 }
 \label{fig:dither}
 \end{figure}
@@ -627,6 +637,8 @@ decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 Left: The fraction of exposures that will need to be rejected for different 
 patch sizes and two different dither patterns.  Right:  The corresponding 
 distribution of 5$\sigma$ depths for each patch.
+\rachel{Need to increase font size to match paper text.  If necessary, make this figure as wide as
+  the page instead of just a column.}
 }
 \label{fig:dither}
 %\end{figure*}
@@ -637,6 +649,7 @@ distribution of 5$\sigma$ depths for each patch.
 \caption{
 The distribution of the sizes of blended objects as derived from the HSC 
 Ultra-Deep data.
+\rachel{Say how size is defined.}
 }
 \label{fig:size}
 \end{figure}
