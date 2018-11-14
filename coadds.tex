@@ -379,6 +379,7 @@ Gaussian with $\sigma$ ranging from 0.5-0.6.
 \item The \textsf{FWHM} of the PSF varies for each epoch as a Log-Normal 
 distribution with mean 0.95 and $\sigma=0.1$ 0.1.  Values are truncated between 
 0.8 and 1.15.
+\rachel{At some point in this list it seems like you have to say the pixel scale?}
 \item The PSF ellipticity is Gaussian with a mean of 0.0 and 0.01 for $e_1$ and 
 $e_2$ respectively, and $\sigma=0.01$.
 \item The galaxy models are pure exponentials.  
@@ -386,9 +387,11 @@ $e_2$ respectively, and $\sigma=0.01$.
 \textsf{COSMOS} data.  We used the \textsf{COSMOS} data packaged along with the 
 \galsim\ software to construct a kernel density estimator for the size and 
 flux.  For the bandwith of the estimator we usea kernel with 0.1$\times$ the 
-intrinsic data covariance.  
+intrinsic data covariance.  \rachel{We packaged a few COSMOS samples with various flux limits, so
+  the above description doesn't really tell us what sample is being simulated - should specify this.}
 \item The intrinsic ellipticity is drawn from the distribution $P(e) \propto 
-(-e^2)^2 \rm{exp}(-e^2/2\sigma_e^2)$ with $\sigma=0.02$.
+  (-e^2)^2 \rm{exp}(-e^2/2\sigma_e^2)$ with $\sigma=0.02$.
+  \rachel{Isn't that a tiny $\sigma_2$ value?  Also which $e$ definition is this?}
 \item We generate 10 epochs for each object.  
 \item Each visit has a random shift applied within a 0.5 pixel radius.
 \item The Jacobian values of the WCS for each exposure are allowed to vary for 
@@ -397,7 +400,7 @@ each epoch.  The amount of variation is taken from values measured on DES.
 \item For coaddition, we compute a mean weighted by the inverse of the pixel 
 variance.
 \item We construct a coadded noise image, as described in 
-\ref{Subsection:Registration}, by generating a single Monte Carlo realization 
+Section~\ref{Subsection:Registration}, by generating a single Monte Carlo realization 
 of the noise for each epoch and resampling and coadding them.
 \item The coadded PSF is constructed by resampling and coadding the individual 
 PSFs for each epoch.
@@ -430,7 +433,7 @@ to approximate the true prior distribution.  Most ongoing and future large
 surveys contain a smaller, deeper component suitable for this purpose.  Given 
 that we are computing moments with a fixed weight function, the moments and 
 their derivatives can be computed analytically for each galaxy.  
-As noted in \citep{Bernstein2016}, because the BFD moments are linear, 
+As noted in \cite{Bernstein2016}, because the BFD moments are linear, 
 measurements on multiple exposures can be combined at the catalog level by 
 taking weighted sums of the individual moments.  This is true as long as each 
 individual exposure is unaliased.  This greatly simplifies doing a 
@@ -442,7 +445,7 @@ object.
 We configure the BFD code to run with the following parameters:
 
 \begin{itemize}
-\item We use the '$k\sigma$' weight function as defined in \cite{Bernstein2016} 
+\item We use the `$k\sigma$' weight function as defined in \cite{Bernstein2016} 
 Section 3.3.  The parameters are set to $N=4$ and $\sigma=1$.  We chose 
 $\sigma$ to be slightly smaller here because it avoids the small bias seen in 
 image simulations.  Other parameters were chosen to match those listed in the 
@@ -454,7 +457,7 @@ build a separate prior for each dataset.  For the higher range, we doubled
 measured moment noise to increase the overlap with the number of deep galaxies.
 \item A knowledge of the covariance matrix is currently necessary in order to 
 build the prior moment distribution.  Previous studies have shown that if the 
-noise varies more than $\sim 10\%$, we need to divide the data into different 
+noise varies more than $\sim$10\%, we need to divide the data into different 
 samples and construct a separate prior for each sample.  In this case, we saw 
 that the variation in covariance was sufficiently small that we only needed to 
 construct a single prior.
@@ -530,7 +533,7 @@ our simulations in both multi-epoch measurements and on the coadded images. For
 \mcal\ we made cuts that the object have \snr$ > 10$ and square size relative
 to the PSF of $T/T_{\mathrm{PSF}} > 0.5$.  For BFD we made cuts XXX.  We
 applied corrections for selection effects in both methods.  We summarize the
-results in table \ref{tab:results}.  Each measurement was performed on
+results in table~\ref{tab:results}.  Each measurement was performed on
 independent simulations, so the errors are uncorrelated.  These results show
 that there is no additional bias in either shear method when measuring the
 shear on the coadds.  We note additional findings from our
