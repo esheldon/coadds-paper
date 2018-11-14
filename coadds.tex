@@ -94,28 +94,34 @@ sims that were run, i.e., saying that biases were undetectable at the X\% level.
 
 \section{Introduction}
 Future large scale astronomical surveys such as LSST \citep{LSST2009}, Euclid 
-\citep{Laureijs2011}, and WFIRST \citep{Spergel2015} will gain an unprecedented 
-increase in the combination of depth and area coverage.  Thus, enabling 
+\citep{Laureijs2011}, and WFIRST \citep{Spergel2015} enable 
 significant advances in many astronomical fields from the solar system to large 
-scale cosmology.  The observing strategy for these surveys will repeatedly 
+scale cosmology through their unprecedented 
+increase in the combination of depth and area coverage.
+The observing strategy for these surveys will repeatedly 
 observe the same patch of sky in different filters.  The number of observations 
 varies significantly between surveys and can range from only a handful to 
 hundreds of exposures.  Having repeated visits helps to build up the required 
 depth, fill-in chip gaps, and reject artifacts like cosmic rays.  Multiple 
 observations can also help reduce systematic uncertainties, especially if they 
-are taken on different parts of the camera.  One question that remains to be 
+are taken on different parts of the camera and with different camera orientations.
+\rachel{While the start of the intro is generic, the above sentence and some later text in the intro
+seem more WL-specific.  Should we have a paragraph saying what weak lensing is and commenting on
+measurement needs (PSF estimation etc.) and systematics that can be a problem?}
+One question that remains to be 
 answered is, what is the optimal way to combine the information from these 
-distinct sets of observations?  Past and current surveys have typically fallen 
+distinct sets of observations?  Past and current surveys have taken approaches that can be
+classified 
 into three categories:
 
 \begin{enumerate}
-\item \label{method:first} Resample all the images to a common pixel grid and 
+\item \label{method:first} Resample all of the images to a common pixel grid and 
 take a weighted sum to construct a single coadded image.  Measurements are 
 performed on the coadd with no need to return to the individual images.
 \item \label{method:second} Perform measurements on each epoch separately.  
 Combine these measurements by taking a weighted average.  
 \item \label{method:third} Create the coadd as in \ref{method:first}, but only 
-use the it to detect objects.  With this information, go back to each of the 
+use it to detect objects.  With this information, go back to each of the 
 individual epochs and do a joint simultaneous measurement of all the images.
 \end{enumerate}
 
@@ -123,7 +129,7 @@ The simplest option is \ref{method:first}, as it significantly reduces the
 complexity and computation time.  For a survey with many epochs this is a huge 
 gain.  Many lensing surveys have chosen to work on coadded images 
 \citep{Hoekstra2006, Leauthaud2007, Hettersheidt2007, Lin2012,Melchior2015, 
-Jee2016, Mandelbaum2018}.  While this approach is attractive, it can also incur 
+Jee2016, Mandelbaum2018}.  While this approach is attractive, it can also induce 
 a number of problems if not done carefully.  First, we must ensure that the 
 individual epochs are properly registered relative to another.  Mis-registered 
 images can severely distort the shape of objects. Also, the PSF can be 
@@ -142,7 +148,7 @@ With the need to reduce systematic errors, a number of recent surveys have
 followed the hybrid method \ref{method:third}.  The CFHTLens 
 \citep{Heymans2013} and KIDS \citep{Hildebrandt2017} collaborations performed 
 photometry and detection on the coadds and shear measurements via multi-epoch 
-fitting. For the Dark Energy Survey (DES) \citep{Zuntz2017}, only object 
+fitting. For the Dark Energy Survey (DES; \citealt{Zuntz2017}), only object 
 detection was done on the coadd and all other measurements were performed on 
 individual epochs.  This approach has worked well to reduce the systematic 
 errors sufficiently low for cosmological analyses.  Can this multi-epoch 
@@ -700,7 +706,7 @@ removing more images.  For Y10 LSST is it possibly these edges are less importan
 \bibliographystyle{astroads}
 \bibliography{references}
 
-\appendix{S/N}
+\appendix
 \section{$S/N$ loss from Coaddition} 
 \label{Section:FluxSN}
 Here we estimate the additional uncertainty in the measured flux when coadding,
