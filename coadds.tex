@@ -182,6 +182,14 @@ of LSST.
 
 \section{Coaddition}
 \label{Section:Coaddition}
+
+\rachel{It seems like we are missing an opportunity here to emphasize the need for algorithms that
+  result in a well-defined PSF.  Isn't that the real reason we don't want to use e.g. a median coadd
+rather than a weighted mean?  And why we want to weight by background, not background$+$signal, when
+taking the mean?  I feel like this is being assumed without being stated, and I think it's important
+to state this because some of the previous WL prejudice against coadds came from analyses with
+coadds that did not have a well-defined PSF.}
+
 The simplest means of combining images is to use a median, weighted mean or 
 clipped mean.  None of these are optimal in $S/N$ because they do not properly 
 account for variations in PSF sizes and background levels.  For the majority of 
