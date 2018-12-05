@@ -206,7 +206,7 @@ scenario of using a simple weighted mean.
 \begin{figure*}
 \includegraphics[width=0.65\textwidth]{CoaddNoise.png}
 \caption{
-The variance map from a random location from the HSC DR1 survey.  Darker colors 
+A variance map from a random location from the HSC DR1 survey.  Darker colors 
 indicate lower variance or a larger number of visits.  This map is constructed 
 by coadding all the variance maps of the individual epochs.
 }
@@ -274,7 +274,6 @@ reconstructed.  We discuss the loss of depth from rejecting these visits in
 \subsection{Expected Flux $S/N$ loss}
 \label{Subsection:FluxSN}
 
-
 For the simple weighted mean coadds used in this work, we expect measurements
 on a coadd to be noisier than those using optimal multi-epoch fitting when the
 size of the PSF varies between epochs.  We expect the increase in noise to be
@@ -334,15 +333,13 @@ to be quite small, especially for galaxys.
 
 \begin{figure}
 \includegraphics[width=0.45\textwidth]{toy-model.png}
-\caption{Measured and predicted values for the increased uncertainty due to 
-coaddition, for the Gaussian galaxies and stars.  The points are the measured 
-values from simulations, and the solid line is the exact prediction from 
-equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows the simple 
-toy model presented in equation \ref{eq:vargal}.
-\rachel{Caption does not make clear what is the horizontal axis.  Also, uncertainty in what?  It's
-  not clear from context -- uncertainty in flux or shape or \dots?  Finally, I recommend slightly
-  increasing the font size on the tick labels and legend to match the font size in the paper.}}
-\label{fig:mcresults}
+\caption{The ratio of the noise in the estimated flux when measured on a coadd 
+compared to an optimal combination of images when both the galaxy and PSF are Gaussian.
+The horizontal axis is the galaxy size, $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$,
+where $\sigma_g$ is the galaxy size and $\sigma_p$ is the PSF size.
+The points are measured values from simulations, and the solid line is the exact 
+prediction from the equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows 
+the simple toy model presented in equation \ref{eq:vargal}.}
 \end{figure}
 
 \section{Simulations}
