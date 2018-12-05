@@ -203,19 +203,15 @@ scenario of using a simple weighted mean.
 
 \subsection{Image Registration and Noise}
 \label{Subsection:Registration}
-%\begin{figure*}
-\begin{figure}
-%\includegraphics[width=0.65\textwidth]{CoaddNoise.png}
-%\includegraphics[width=\columnwidth]{CoaddNoise.png}
+\begin{figure*}
+\includegraphics[width=0.65\textwidth]{CoaddNoise.png}
 \caption{
 The variance map from a random location from the HSC DR1 survey.  Darker colors 
 indicate lower variance or a larger number of visits.  This map is constructed 
 by coadding all the variance maps of the individual epochs.
-\rachel{No actual figure here?}
 }
 \label{fig:noise}
-\end{figure}
-%\end{figure*}
+\end{figure*}
 
 In order to coadd, we must account for the actual pointing of each image and 
 the local distortion caused by the optics, atmosphere, etc.  This requires 
