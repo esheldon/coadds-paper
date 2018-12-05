@@ -607,7 +607,7 @@ Two different LSST dither patterns are shown taken from \cite{LSSTSims}.
 On the left each visit gets a random position and on the right a spiral pattern.
 Each dot shows a separate offset from the nominal pointing.
 The green circle represents the approximate size of the LSST focal plane.  
-The dots are restricted to within the blue hexagon for this study.
+The dots are restricted to within the blue hexagon for this study. 
 }
 \label{fig:dither}
 \end{figure}
@@ -615,7 +615,7 @@ The dots are restricted to within the blue hexagon for this study.
 To compute the number of missing exposures we might expect, we place 10,000 
 square patches of a particular size on the sky and calculate the number of 
 visits that have a CCD edge that will cross each patch.  We can also calculate 
-the reduced 5$\sigma$ point source depth for each patch.  Fig.~\ref{fig:dither} 
+the reduced 5$\sigma$ point source depth for each patch.  Fig.~\ref{fig:cell} 
 shows these values for three different patch sizes with side length 0.1, 0.5 
 and 0.8 arcminutes. Given these patch sizes, the fraction of rejected visits 
 can vary from 3$\%$ to 20$\%$.  This emphasizes the fact that we must use small 
@@ -638,15 +638,14 @@ therefore conclude that a typical object therefore, will only suffer a small
 decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 
 \begin{figure*}
-\includegraphics[width=0.8\textwidth]{cell.png}
+\includegraphics[width=\textwidth]{cell.png}
 \caption{
-Left: The fraction of exposures that will need to be rejected for different 
-patch sizes and two different dither patterns.  Right:  The corresponding 
-distribution of 5$\sigma$ depths for each patch.
-\rachel{Need to increase font size to match paper text.  If necessary, make this figure as wide as
-  the page instead of just a column.}
+{\it Left}: The fraction of visits that would need to be rejected from a patch for three 
+differnt patch sizes (0.1, 0.5 and 0.8 arcminutes) and the two dither patterns 
+shown in Fig.~\ref{fig:dither}.  {\it Right}:  The corresponding distribution 
+of 5$\sigma$ depths for each patch.
 }
-\label{fig:dither}
+\label{fig:cell}
 \end{figure*}
 
 
