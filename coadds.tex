@@ -77,19 +77,19 @@
 \begin{abstract}
 Upcoming wide field surveys will have many overlapping epochs of the same 
 region of sky.  The conventional wisdom is that in order to reduce the 
-systematic errors sufficiently for systematics limited measurements, like 
+errors sufficiently for systematics limited measurements, like 
 cosmic shear, we must do simultaneous fitting of all the epochs.  Using current 
 algorithms this will require a significant amount of computing time and effort. 
 In this paper, we examine the possibility of doing shear measurements on 
-coadded images directly.  We show on a set of simulations that there is no bias 
-or degradation in performance for two independent shear estimators.  The one 
-caveat to working on coadds, is that we must remove images that overlap a CCD 
-boundary, as the PSF is not well defined.  We estimate that the number of 
-epochs that must be rejected for a survey like LSST is on the order of $\sim 3\%$.
-\rachel{One concept I would recommend introducing already in the abstract is that the above
-  statements presume use of a principled coaddition algorithm (with a mathematically well-defined
-  PSF).  I also recommend giving some numbers for how well biases in shear were constrained given the
-sims that were run, i.e., saying that biases were undetectable at the X\% level. }
+coadded images directly.  We show on a set of simulations that the shear multiplicative
+bias can be constrained below the 0.1$\%$ level on coadded images.
+We see no degradation in performance between the multi-epoch and coadded approach for
+two independent shear codes: Metacalibration and BFD.  The one 
+caveat here, is the assumption that we have a principled
+coadd, i.e. the PSF is mathematically well-defined for all the input images.
+This requires us to remove images that overlap a CCD boundary.  We estimate 
+that the number of epochs that must be rejected for a survey like LSST is on the 
+order of $\sim 3\%$ for typical objects.
 \end{abstract}
 
 \section{Introduction}
