@@ -443,7 +443,7 @@ As noted in \cite{Bernstein2016}, because the BFD moments are linear,
 measurements on multiple exposures can be combined at the catalog level by 
 taking weighted sums of the individual moments.  This is true as long as each 
 individual exposure is unaliased.  This greatly simplifies doing a 
-muli-exposure measurement compared to other methods because there is no need to 
+multi-exposure measurement compared to other methods because there is no need to 
 go back to the individual pixels.  
 For the coadd we need to have an accurate measure of the pixel noise power 
 spectrum.  We can measure this directly from the coadded noise image for each 
@@ -461,6 +461,8 @@ noise was reduced by a factor of 100.
 \item We divide the data into two different regimes: $S/N$ 5-25 and 25-50.  We 
 build a separate prior for each dataset.  For the higher range, we doubled 
 measured moment noise to increase the overlap with the number of deep galaxies.
+\rachel{I am not following this last sentence, specifically the ``we doubled measured moment noise''
+part - can you explain / rephrase?}
 \item A knowledge of the covariance matrix is currently necessary in order to 
 build the prior moment distribution.  Previous studies have shown that if the 
 noise varies more than $\sim$10\%, we need to divide the data into different 
@@ -477,10 +479,10 @@ flux moment when combined for the multi-epoch measurement.
 \Mcal\ is a method to calibrate weak lensing shear measurements using
 transformations of the real images, without reference to external data sets or
 simulations \citep{HuffMand2017,SheldonHuff2017}.  Below we give a brief review
-of the \mcal\ formalism.  For full details of the method used in this work, see
+of the \mcal\ formalism.  For full details of the \Mcal\ implementation used in this work, see
 \cite{SheldonHuff2017}.
 
-The basic assumption behind \mcal\ is that the two component shear estimator \vest\
+The basic assumption behind \mcal\ is that the two-component shear estimator \vest\
 is linearly related to the applied shear $\vecgam$, such that
 \begin{align} \label{eq:Eexpand}
     \vest &= \vest|_{\gamma=0} + \frac{ \partial \vest }{ \partial \vecgam}\bigg|_{\gamma=0} \vecgam  + ... \nonumber \\
@@ -490,10 +492,10 @@ We have defined the $2 \times 2$ shear response matrix
 \begin{align}
     \mbox{\mcalR} &\equiv \frac{\partial \vest}{\partial \vecgam} \bigg|_{\gamma=0}.
 \end{align}
-With \mcal\ these derivative are performed by shearing the real image
+With \mcal\ these derivatives are performed by shearing the real image
 of the object and calculating a finite difference derivative.  The image
 is deconvolved from the PSF, sheared by a small amount, and reconvolved by
-a larger PSF to suppress amplfied noise.  Measurements $\vest$ are then made
+a larger PSF to suppress amplified noise.  Measurements $\vest$ are then made
 on these images and the derivatives are formed. For element $i,j$
 \begin{equation} \label{eq:Rnum}
     R_{i,j} = \frac{\est_i^+ - \est_i^-}{\Delta \gamma_j}.
