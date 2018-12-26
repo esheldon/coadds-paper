@@ -80,7 +80,7 @@
 \begin{abstract}
 Upcoming wide field surveys will have many overlapping epochs of the same 
 region of sky.  The conventional wisdom is that in order to reduce the 
-errors sufficiently for systematics limited measurements, like 
+errors sufficiently for systematics-limited measurements, like 
 cosmic shear, we must do simultaneous fitting of all the epochs.  Using current 
 algorithms this will require a significant amount of computing time and effort. 
 In this paper, we examine the possibility of doing shear measurements on 
@@ -197,8 +197,8 @@ The simplest means of combining images is to use a median, weighted mean or
 clipped mean.  None of these are optimal in $S/N$ because they do not properly 
 account for variations in PSF sizes and background levels.  For the majority of 
 detections, which are small faint objects, the epochs with the smallest seeing 
-will have the most information.  \cite{Kaiser2004,Zackay2017} proposed 
-constructing an optimal coadd, by stacking the image convolved with the PSF.  
+will have the most information.  \cite{Kaiser2004} and \cite{Zackay2017} proposed 
+constructing an optimal coadd by stacking the image convolved with the PSF.  
 This results in an image that loses no information when combining epochs of 
 different seeing.  Further research in this area seems promising in order to 
 maximize the $S/N$ for a coadd.  However, for this paper we only consider the 
@@ -257,9 +257,12 @@ polynomial is used to describe the variation of the PSF across a CCD.  The
 challenge on a coadd is that you have sharp changes whenever you cross the edge 
 of a detector in any epoch.  Given this, it can be difficult to construct a 
 model on the coadd.  An alternative approach used by 
-\cite{Jee2016,Mandelbaum2018} is to create a valid coadded PSF by resampling 
+\cite{Jee2016} and \cite{Mandelbaum2018} is to create a valid coadded PSF by resampling 
 and interpolating the single epoch PSFs in the same way as the images 
-\cite{DLS, HSC}.  This avoids any problems of having to spatially interpolate a 
+\cite{DLS, HSC}.
+\rachel{May be more appropriate to cite the HSC pipeline paper rather than the shear catalog paper
+  in the previous sentence?}
+This avoids any problems of having to spatially interpolate a 
 complex PSF model.  However, objects that include an epoch which crosses a 
 detector boundary will pose a problem, as the PSF is not be well defined.  For 
 HSC DR1, objects that contained such a boundary image were flagged and 
