@@ -136,9 +136,9 @@ Jee2016, Mandelbaum2018}.  While this approach is attractive, it can also induce
 a number of problems if not done carefully.  First, we must ensure that the 
 individual epochs are properly registered relative to another.  Mis-registered 
 images can severely distort the shape of objects. Also, the PSF can be 
-challenging to model on the coadd due to the fact that as you cross from the 
-boundary of one detector to another there will be discontinuous ``jumps'' in the 
-shape and size of the PSF.  In addition, when combining images where the size 
+challenging to model on the coadd due to the discontinuous ``jumps'' in the 
+shape and size of the PSF when crossing the boundary between detectors in any individual visit
+contributing to the coadd.  In addition, when combining images where the size 
 of the PSF varies widely, there will be loss in S/N by doing a simple average.  
 We discuss these problems in more detail in Section~\ref{Section:Coaddition}.
 Method \ref{method:second} has been used in fewer cases \citep{Jarvis2003}.  
@@ -544,8 +544,8 @@ analysis:
 \item The Monte Carlo noise images that we generated for each epoch were the
 same size as the galaxy postage stamp; 48 by 48 pixels.  If the size of the
 noise image is reduced we see a bias in the BFD results.  Reducing the noise
-image to 40 by 40 results in a $\sim 1\%$ bias and increases as you decrease
-the size.  Presumably, this comes from not having sufficient information to
+image to 40 by 40 results in a $\sim 1\%$ bias and increases with decreasing 
+size.  Presumably, this comes from not having sufficient information to
 construct the power spectrum accurately on the final coadd.  Note \mcal\
 has a strict requirement that noise image must be at least as large as the
 original image.
