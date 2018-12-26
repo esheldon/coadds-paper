@@ -539,7 +539,10 @@ operations.
 \subsection{Shear bias} We ran the BFD and \mcal\ shear measurement codes on
 our simulations in both multi-epoch measurements and on the coadded images. For
 \mcal\ we made cuts that the object have \snr$ > 10$ and square size relative
-to the PSF of $T/T_{\mathrm{PSF}} > 0.5$.  For BFD we made cuts XXX.  We
+to the PSF of $T/T_{\mathrm{PSF}} > 0.5$.
+\rachel{Were those cuts made on the coadd and used consistently for the coadd vs. multi-epoch
+  measurements?} For BFD we made cuts XXX.
+\rachel{Flagging this missing info re: BFD cuts, in case this fell through the cracks.} We
 applied corrections for selection effects in both methods.  We summarize the
 results in table~\ref{tab:results}.  Each measurement was performed on
 independent simulations, so the errors are uncorrelated.  These results show
@@ -554,8 +557,8 @@ same size as the galaxy postage stamp; 48 by 48 pixels.  If the size of the
 noise image is reduced we see a bias in the BFD results.  Reducing the noise
 image to 40 by 40 results in a $\sim 1\%$ bias and increases with decreasing 
 size.  Presumably, this comes from not having sufficient information to
-construct the power spectrum accurately on the final coadd.  Note \mcal\
-has a strict requirement that noise image must be at least as large as the
+construct the power spectrum accurately on the final coadd.  Note that \mcal\
+has a strict requirement that the noise image must be at least as large as the
 original image.
 
 \item Initially, \mcal\ required a very high order interpolation kernel (order
@@ -566,8 +569,11 @@ centered in the middle of the postage stamp.  If instead we offset the PSFs so
 that it was interpolated in the same way as the object images during
 coaddition, we found that the bias went away and we could use a lower order
 interpolation kernel.  This problem did not seem to effect the BFD method.
-This is likely because in BFD we making the same error in the deep reference
+This is likely because in BFD we were making the same error in the deep reference
 set as in the shallow images, so this problem was being calibrated out.
+\rachel{Interesting.  This is kind of a side point for this paper but I'm curious to think through
+  what this mean in terms of the ability to self-calibrate some systematics using BFD (which ones
+  can be self-calibrated in this way because they affect the deep images).}
 
 \item We tested coadds created from original images that had large random
 rotations.  We found no additional bias, as long as the images were padded
