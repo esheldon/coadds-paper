@@ -96,6 +96,8 @@ order of $\sim 3\%$ for typical objects.
 \end{abstract}
 
 \section{Introduction}
+\vspace{0.5in}
+
 Future large scale astronomical surveys such as LSST \citep{LSST2009}, Euclid 
 \citep{Laureijs2011}, and WFIRST \citep{Spergel2015} enable 
 significant advances in many astronomical fields from the solar system to large 
@@ -116,7 +118,6 @@ answered is, what is the optimal way to combine the information from these
 distinct sets of observations?  Past and current surveys have taken approaches that can be
 classified 
 into three categories:
-
 \begin{enumerate}
 \item \label{method:first} Resample all of the images to a common pixel grid and 
 take a weighted sum to construct a single coadded image.  Measurements are 
@@ -287,7 +288,7 @@ largest for the smallest objects such as stars and distant galaxies, the images
 of which are more affected by the PSF.
 
 To gain some intuition, we derive the functional form of the expected loss in
-$S/N$ for the case of a linear fit for the amplitide $A$ of a template, or
+$S/N$ for the case of a linear fit for the amplitude $A$ of a template, or
 ``matched filter''.  In this case we can analytically compute the uncertainty
 in the estimated flux, $\hat{A}$, from a linear fit to the data (see Appendix
 \ref{Subsection:FluxSN}). It is also useful to introduce a ``toy model'', which
@@ -304,20 +305,24 @@ coadd to that from fitting the epochs simultaneously is approximately:
 \approx 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta 
 \sigma_p}{\sigma_p} \right)^2,
 \end{align}
-where $\sigma_p$ is the PSF size, $\Delta \sigma_p$ is the RMS scatter in PSF
-size, and $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$ is the ratio of the galaxy
+where $\sigma_p$ is the PSF size,  \rachel{mean PSF size?} $\Delta \sigma_p$ is the RMS scatter in PSF
+size across the individual visits, and $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$ is the ratio of the galaxy
 size, $\sigma_g$, to the PSF size.  This result shows the increased variance is
-proportional to the resolution, $R$, and the relative variation in PSF size
+proportional to $1-R$ and the relative variation in PSF size
 $(\Delta \sigma_p/\sigma_p)^2$.  For a large galaxy $R$ is near unity and for a star
 $R$ is near zero, so as expected the effect is largest for stars.  In cases where there
 are significant PSF variations of order 1, the variance could be increased by a
-factor of 2 or three for star-like objects.  However, most current and future
+factor of 2--3 for star-like objects.  However, most current and future
 surveys have significantly less PSF variation than this, on the order of 0.1.
+\rachel{For what it's worth, if I take the Cerro Pachon seeing distribution from the LSST SRD, I
+  find mean seeing of 0.67 arcsec and standard deviation of 0.3, so $\Delta \sigma_p/\sigma_p \sim
+  0.45$.  Accounting for variation in zenith angle would presumably broaden this more.  I'm not sure
+this is so atypical, and it's closer geometrically to the original example you gave (1) than the one
+you say is typical (0.1).}
 
 We tested the validity of equation~\eqref{eq:vargal} using a simple Monte Carlo
 simulation.  We used the \galsim\ package \citep{GalSim} to generate images of Gaussian
-galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package
-\footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used
+galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package\footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used
 a PSF with FWHM=0.9 arcsec, with Gaussian variation between images of $\Delta
 \sigma_p/\sigma_p = 0.1$.
 
@@ -325,17 +330,17 @@ All images were placed at the center of the image, so that no interpolation was
 required when coadding the images.  We used the same constant noise for all 
 images, and used a simple mean for the coaddition process.  The primary 
 variable of interest is the resolution $R$.  We varied the size of the galaxy 
-from zero, or star-like, to more than twice the PSF size, such that $<R> = 
+from zero, or star-like, to more than twice the PSF size, such that $\langle R\rangle = 
 0.83$.  A comparison of the results from the simulations and analytical formula 
 are shown in Figure~\ref{fig:mcresults}.  The points are the measured values 
-and the solid line are the exact variance estimators from 
-\eqref{eq:exact_var_coadd} and~\eqref{eq:exact_var_mult}.  The dotted lines are the 
+and the solid line is the ratio of the exact variance estimators from 
+\eqref{eq:exact_var_coadd} and~\eqref{eq:exact_var_multi}.  The dotted lines are the 
 predicted values from the toy model in equation~\eqref{eq:vargal}.  We can 
 see that the toy model slightly over-predicts the increase in variance, but is 
 still evidently useful for understanding how the effect scales with resolution. 
 For a given survey we can use this to predict the effect that coaddition will 
 have on the flux uncertainty.  For current and future surveys the effect seems 
-to be quite small, especially for galaxys.
+to be quite small, especially for galaxies.
 
 \begin{figure}
 \includegraphics[width=0.45\textwidth]{toy-model.png}
@@ -347,7 +352,7 @@ PSF-convolved object size, $R=\sigma_g^2/(\sigma_p^2 +
 where $\sigma_g$ is the galaxy size and $\sigma_p$ is the PSF size.
 The points are measured values from simulations, and the solid line is the exact 
 prediction from the equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows 
-the simple toy model presented in equation~\eqref{eq:vargal}.}
+the simple toy model presented in equation~\eqref{eq:vargal}. \label{fig:mcresults}}
 \end{figure}
 
 \section{Simulations}
