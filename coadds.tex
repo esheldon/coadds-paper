@@ -168,14 +168,14 @@ epochs.  The higher $S/N$ on the coadds makes this much easier.
 
 In this paper, we explore the possibility of avoiding multi-epoch fitting by 
 demonstrating that we can recover shear on coadds without incurring systematic 
-errors.  In Section \ref{Section:Coaddition}, we discuss the problems using 
+errors.  In Section~\ref{Section:Coaddition}, we discuss the problems using 
 coadds and potential ways to mitigate them.  We propose to create per object 
 coadds of the image, PSF and the noise.  We test this proposal by looking at 
 the measured shear bias on simulations of both multi-epoch and coadd data.  
-Section \ref{Section:Simulation} describes the setup and properties of the 
+Section~\ref{Section:Simulation} describes the setup and properties of the 
 simulations.  We test two separate shear measurement pipelines: BFD and 
 \Mcal.  We summarize how these algorithms were configured and applied 
-in Section \ref{Section:Measurement}.  Section \ref{Section:Results} shows the 
+in Section~\ref{Section:Measurement}.  Section~\ref{Section:Results} shows the 
 results of these methods.  We show that for both shear methods, we are able to 
 recover unbiased results.  The advantage of running more than one algorithm 
 shows that our results are not specific to a particular shear estimator, but 
@@ -222,7 +222,7 @@ resampling and interpolating each image onto the same coordinate grid.  This
 interpolation will cause the noise in the image to have correlations from pixel 
 to pixel.  In addition, depending on the local distortion and relative offset 
 between pixel grids, this can cause the noise to become non-stationary, i.e. it 
-can vary over the size of the image.  Figure \ref{fig:noise} shows a pixel 
+can vary over the size of the image.  Figure~\ref{fig:noise} shows a pixel 
 variance map of the coadded image from a random position in the HSC survey 
 \cite{HSC_DR1} from their first data release.  The image cutout corresponds to 
 a region roughly $3\arcmin \times 1.5\arcmin$ in area.  The darker regions have 
@@ -231,7 +231,7 @@ to edges of individual CCDs.  Also visible are the small scale variations
 resulting from resampling and grid offsets.  The streaks correspond to cosmic 
 rays that are masked on individual epochs.  The range of variations is 
 $\sim10\%$ and the scale on which they vary is close to the average size of on 
-object (see \ref{Section:Exclusion}).
+object (see~\ref{Section:Exclusion}).
 
 By definition, the variance map does not include the pixel to pixel covariance. 
 This will also vary spatially depending on the dither pattern and 
@@ -292,7 +292,7 @@ illustrates the main features of this process.  For the toy model we use data
 that follows a circular Gaussian, which makes the calculations easier and
 allows introduction of useful approximations.
 
-In Appendix \ref{Subsection:FluxSN} we show that, for the toy model and small
+In Appendix~\ref{Subsection:FluxSN} we show that, for the toy model and small
 variations in the PSF size, the ratio of the flux variance derived from the
 coadd to that from fitting the epochs simultaneously is approximately:
 \begin{align} \label{eq:vargal}
@@ -311,7 +311,7 @@ are significant PSF variations of order 1, the variance could be increased by a
 factor of 2 or three for star-like objects.  However, most current and future
 surveys have significantly less PSF variation than this, on the order of 0.1.
 
-We tested the validity of equation \ref{eq:vargal} using a simple Monte Carlo
+We tested the validity of equation~\ref{eq:vargal} using a simple Monte Carlo
 simulation.  We used the \galsim\ package \citep{GalSim} to generate images of Gaussian
 galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package
 \footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used
@@ -324,9 +324,9 @@ images, and used a simple mean for the coaddition process.  The primary
 variable of interest is the resolution $R$.  We varied the size of the galaxy 
 from zero, or star-like, to more than twice the PSF size, such that $<R> = 
 0.83$.  A comparison of the results from the simulations and analytical formula 
-are shown in Figure \ref{fig:mcresults}.  The points are the measured values 
+are shown in Figure~\ref{fig:mcresults}.  The points are the measured values 
 and the solid line are the exact variance estimators from 
-\ref{eq:exact_var_coadd} and \ref{eq:exact_var_mult}.  The dotted lines are the 
+\ref{eq:exact_var_coadd} and~\ref{eq:exact_var_mult}.  The dotted lines are the 
 predicted values from the toy model in equation~\ref{eq:vargal}.  We can 
 see that the toy model slightly over-predicts the increase in variance, but is 
 still evidently useful for understanding how the effect scales with resolution. 
@@ -344,7 +344,7 @@ PSF-convolved object size, $R=\sigma_g^2/(\sigma_p^2 +
 where $\sigma_g$ is the galaxy size and $\sigma_p$ is the PSF size.
 The points are measured values from simulations, and the solid line is the exact 
 prediction from the equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows 
-the simple toy model presented in equation \ref{eq:vargal}.}
+the simple toy model presented in equation~\ref{eq:vargal}.}
 \end{figure}
 
 \section{Simulations}
@@ -839,7 +839,7 @@ with derivative
 \Bigr).
 \end{align}
 
-For these gaussian models all terms in equation \ref{eq:generalperturb} can
+For these gaussian models all terms in equation~\ref{eq:generalperturb} can
 be readily calculated in the continuous limit, and we find
 
 \begin{align} \label{eq:varbasic}
@@ -853,7 +853,7 @@ We expect the increase in variance to be less for the case
 of large galaxies convolved by a PSF.  If the galaxy is a round Gaussian with
 size $\sigma_g$ and the PSF is a round Gaussian with size $\sigma_p$,
 and only the PSF size varies between images,
-we can use the chain rule to rewrite equation \ref{eq:varbasic} as
+we can use the chain rule to rewrite equation~\ref{eq:varbasic} as
 
 \begin{align} \label{eq:vargal_appendix}
 \left( \frac{ {\rm var} \hat{A}_\coadd }{{\rm var} \hat{A}_{\rm multi} } 
