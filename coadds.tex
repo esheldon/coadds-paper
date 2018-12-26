@@ -311,7 +311,7 @@ are significant PSF variations of order 1, the variance could be increased by a
 factor of 2 or three for star-like objects.  However, most current and future
 surveys have significantly less PSF variation than this, on the order of 0.1.
 
-We tested the validity of equation~\ref{eq:vargal} using a simple Monte Carlo
+We tested the validity of equation~\eqref{eq:vargal} using a simple Monte Carlo
 simulation.  We used the \galsim\ package \citep{GalSim} to generate images of Gaussian
 galaxies, convolved by Gaussian PSFs, and used the \ngmix\ package
 \footnote{\url{https://github.com/esheldon/ngmix}} to fit for the flux. We used
@@ -326,8 +326,8 @@ from zero, or star-like, to more than twice the PSF size, such that $<R> =
 0.83$.  A comparison of the results from the simulations and analytical formula 
 are shown in Figure~\ref{fig:mcresults}.  The points are the measured values 
 and the solid line are the exact variance estimators from 
-\ref{eq:exact_var_coadd} and~\ref{eq:exact_var_mult}.  The dotted lines are the 
-predicted values from the toy model in equation~\ref{eq:vargal}.  We can 
+\eqref{eq:exact_var_coadd} and~\eqref{eq:exact_var_mult}.  The dotted lines are the 
+predicted values from the toy model in equation~\eqref{eq:vargal}.  We can 
 see that the toy model slightly over-predicts the increase in variance, but is 
 still evidently useful for understanding how the effect scales with resolution. 
 For a given survey we can use this to predict the effect that coaddition will 
@@ -344,7 +344,7 @@ PSF-convolved object size, $R=\sigma_g^2/(\sigma_p^2 +
 where $\sigma_g$ is the galaxy size and $\sigma_p$ is the PSF size.
 The points are measured values from simulations, and the solid line is the exact 
 prediction from the equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows 
-the simple toy model presented in equation~\ref{eq:vargal}.}
+the simple toy model presented in equation~\eqref{eq:vargal}.}
 \end{figure}
 
 \section{Simulations}
@@ -839,7 +839,7 @@ with derivative
 \Bigr).
 \end{align}
 
-For these gaussian models all terms in equation~\ref{eq:generalperturb} can
+For these gaussian models all terms in equation~\eqref{eq:generalperturb} can
 be readily calculated in the continuous limit, and we find
 
 \begin{align} \label{eq:varbasic}
@@ -853,7 +853,7 @@ We expect the increase in variance to be less for the case
 of large galaxies convolved by a PSF.  If the galaxy is a round Gaussian with
 size $\sigma_g$ and the PSF is a round Gaussian with size $\sigma_p$,
 and only the PSF size varies between images,
-we can use the chain rule to rewrite equation~\ref{eq:varbasic} as
+we can use the chain rule to rewrite equation~\eqref{eq:varbasic} as
 
 \begin{align} \label{eq:vargal_appendix}
 \left( \frac{ {\rm var} \hat{A}_\coadd }{{\rm var} \hat{A}_{\rm multi} } 
