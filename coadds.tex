@@ -641,12 +641,17 @@ the reduced 5$\sigma$ point source depth for each patch.  Fig.~\ref{fig:cell}
 shows these values for three different patch sizes with side length 0.1, 0.5 
 and 0.8 arcminutes. Given these patch sizes, the fraction of rejected visits 
 can vary from 3$\%$ to 20$\%$.  This emphasizes the fact that we must use small 
-patches to avoid losing many visits.  
+patches to avoid losing many visits.  \rachel{This figure shows the 5-sigma point source depth in
+  which band?  I'm trying to figure out what numbers to compare it to.}
 To connect this with observations we need to know the typical object size in 
 LSST.  In Fig.~\ref{fig:size}, we show the distribution of blend family sizes 
 from the HSC Ultra-Deep~\citep{SurveyOverview} data.  The HSC Ultra-Deep data is 
 a good match for LSST because it has a depth of $\sim 27.5$ which is comparable 
-to the wide field LSST depth.  Note that this is not the size of single 
+to the wide field LSST depth.
+\rachel{Is this statement specific to the Ultra-Deep data in PDR1?  My expectation is that when the
+  HSC survey is complete, HSC UD will be significantly deeper than LSST Wide, while HSC Deep will be
+comparable to LSST Wide.  But that might not be true in the first data release?}
+Note that this is not the size of single 
 objects, but rather the size of objects that have been identified as coming 
 from the same blend.  A blend is defined as objects that have been combined 
 because contiguous pixels above threshold overlap.  The LSST software is fairly 
@@ -656,7 +661,7 @@ The blend sizes are computed from the bounding box of the above threshold
 pixels.  We use the square root of the area of the bounding box as a proxy for 
 its size.  From the figure we can see that most objects have box sides of 
 $\sim 0.05$ which corresponds well with our patch side of 0.1 arcminutes.  We 
-therefore conclude that a typical object therefore, will only suffer a small 
+therefore conclude that a typical object will only suffer a small 
 decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 
 \begin{figure*}
@@ -665,7 +670,10 @@ decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 {\it Left}: The fraction of visits that would need to be rejected from a patch for three 
 different patch sizes (0.1, 0.5 and 0.8 arcminutes) and the two dither patterns 
 shown in Fig.~\ref{fig:dither}.  {\it Right}:  The corresponding distribution 
-of 5$\sigma$ depths for each patch.
+of 5$\sigma$ depths for each patch. \rachel{Legend should have arcmin symbol rather than single
+  quote mark. Also, I suggest switching to a color blind-friendly color
+  palette, like seaborn ``colorblind'' (https://seaborn.pydata.org/tutorial/color\_palettes.html) or
+https://jiffyclub.github.io/palettable/tableau/\#colorblind\_10}
 }
 \label{fig:cell}
 \end{figure*}
