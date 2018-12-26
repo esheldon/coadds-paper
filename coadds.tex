@@ -358,7 +358,7 @@ the simple toy model presented in equation~\eqref{eq:vargal}. \label{fig:mcresul
 \section{Simulations}
 \label{Section:Simulation}
 While the insight derived in the previous section was instructive, there are 
-many potential complications in real data that could make things harder when 
+many potential complications in real data that could make things more difficult when 
 measuring shear.  Therefore, we construct a suite of simulations to test the 
 impact of coaddition specifically for shear estimators.  The goal is to 
 simulate multiple epochs of the same galaxy with a known shear and compare the 
@@ -371,20 +371,19 @@ time to generate the dataset is significant as we need to simulate billions of
 galaxies to reach the needed precision for cosmic shear.  With fewer epochs, we 
 may also be more sensitive to certain systematic errors that could get averaged 
 down for a survey with many more observations.
-To generate the galaxy population we use code from the \nnsim\ package 
-\footnote{\url{https://github.com/esheldon/nsim}} which is based on \galsim\ 
+To generate the galaxy population we use code from the \nnsim\ package\footnote{\url{https://github.com/esheldon/nsim}} which is based on \galsim\ 
 and \ngmix.  The generated galaxy images have the following properties:
 
 \begin{itemize}
-\item We generate single galaxy images on 48x48 postage stamps with no 
+\item We generate single galaxy images on $48 \times 48$ postage stamps with no 
 neighbors.
 \item The pixel scale is the same as DES, 0.27 arcseconds/pixel.
 \item The pixel noise is uniform for each visit and is modeled as a zero-mean 
 Gaussian with $\sigma$ ranging from 0.5-0.6.
-\item Assume the PSF model is perfectly known.
+\item We assume the PSF model is perfectly known.
 \item The PSF model is a Moffat with $\beta=3.5$.
 \item The \textsf{FWHM} of the PSF varies for each epoch as a Log-Normal 
-distribution with mean 0.95 and $\sigma=0.1$ 0.1.  Values are truncated between 
+distribution with mean 0.95 and $\sigma=0.1$.  Values are truncated between 
 0.8 and 1.15.
 \item The PSF ellipticity is Gaussian with a mean of 0.0 and 0.01 for $e_1$ and 
 $e_2$ respectively, and $\sigma=0.01$.
@@ -395,8 +394,10 @@ along with the \galsim\ software to construct a kernel density estimator for the
 size and flux.  For the bandwith of the estimator we use a kernel with 0.1$\times$ 
 the intrinsic data covariance.
 \item The intrinsic ellipticity is drawn from the distribution $P(e) \propto 
-  (-e^2)^2 \rm{exp}(-e^2/2\sigma_e^2)$ with $\sigma_e=0.02$, where $e$ is defined
+  (-e^2)^2 \exp{(-e^2/2\sigma_e^2)}$ with $\sigma_e=0.02$, where $e$ is defined
   as a shear.  The small width here is set to reduce the shape noise.
+\rachel{This is a slightly odd way to write the $P(e)$ and I am wondering if there is a typo?  (I'm
+  not sure why to write $(-e^2)^2$ instead of just $e^4$\dots)}
 \item We generate 10 epochs for each object.  
 \item Each visit has a random shift applied within a 0.5 pixel radius.
 \item The Jacobian values of the WCS for each exposure are allowed to vary for 
