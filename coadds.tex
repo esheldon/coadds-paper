@@ -254,8 +254,8 @@ account for the correlations.
 In many situations, we need to be able to model the PSF from the observed stars 
 and interpolate it to the positions of galaxies.  Typically, a low order 
 polynomial is used to describe the variation of the PSF across a CCD.  The 
-challenge on a coadd is that you have sharp changes whenever you cross the edge 
-of a detector in any epoch.  Given this, it can be difficult to construct a 
+challenge on a coadd is that the PSF is discontinuous across the edge 
+of a detector in any individual epoch.  Given this, it can be difficult to construct a 
 model on the coadd.  An alternative approach used by 
 \cite{Jee2016} and \cite{Mandelbaum2018} is to create a valid coadded PSF by resampling 
 and interpolating the single epoch PSFs in the same way as the images 
@@ -275,7 +275,7 @@ when creating the coadd.  This means we can no longer construct a unique coadd
 for all objects, as each object will need to potentially reject different 
 epochs.  But the advantage is that the coadded PSF model can be correctly 
 reconstructed.  We discuss the loss of depth from rejecting these visits in 
-\ref{Section:Exclusion}.
+Section~\ref{Section:Exclusion}.
 
 \subsection{Expected Flux $S/N$ loss}
 \label{Subsection:FluxSN}
