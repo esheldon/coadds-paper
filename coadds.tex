@@ -759,7 +759,7 @@ Here we estimate the additional uncertainty in the measured flux when coadding,
 for the example of ``matched-filter'' photometry, where a linear fit is 
 performed
 for the amplitude of a model.
-Let's consider an optimal estimator for a single unknown parameter that is
+We consider an optimal estimator for a single unknown parameter that is
 linear in the observables. Let the model be $A\boldsymbol{m}$, where $A$ is a
 scalar amplitude and $\boldsymbol{m}$ is a normalized signal model, or
 template. Then the log-likelihood for $A$ (assuming a Gaussian signal
@@ -889,7 +889,6 @@ be readily calculated in the continuous limit, and we find
 \right)_{\rm toy} = 
 1 + 2 \left( \frac{\Delta \sigma}{\sigma} \right)^2
 \end{align}
-
 where $(\Delta \sigma)^2$ is to be interpreted as the rms variation of the size.
 We expect the increase in variance to be less for the case
 of large galaxies convolved by a PSF.  If the galaxy is a round Gaussian with
@@ -905,7 +904,6 @@ we can use the chain rule to rewrite equation~\eqref{eq:varbasic} as
 &\equiv 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta 
 \sigma_p}{\sigma_p} \right)^2
 \end{align}
-
 where we have used the definition of the resolution factor $R =
 \sigma_g^2/(\sigma_p^2 + \sigma_g^2)$.  This confirms our
 intuition that measurements of large galaxies, with $R \sim 1$ will suffer
