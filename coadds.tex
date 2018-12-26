@@ -88,8 +88,8 @@ coadded images directly.  We show on a set of simulations that the shear multipl
 bias can be constrained below the 0.1$\%$ level on coadded images.
 We see no degradation in performance between the multi-epoch and coadded approach for
 two independent shear codes: Metacalibration and BFD.  The one 
-caveat here, is the assumption that we have a principled
-coadd, i.e. the PSF is mathematically well-defined for all the input images.
+caveat here is the assumption that we have a principled
+coadd, i.e.\ the PSF is mathematically well-defined for all the input images.
 This requires us to remove images that overlap a CCD boundary.  We estimate 
 that the number of epochs that must be rejected for a survey like LSST is on the 
 order of $\sim 3\%$ for typical objects.
@@ -327,7 +327,7 @@ from zero, or star-like, to more than twice the PSF size, such that $<R> =
 are shown in Figure \ref{fig:mcresults}.  The points are the measured values 
 and the solid line are the exact variance estimators from 
 \ref{eq:exact_var_coadd} and \ref{eq:exact_var_mult}.  The dotted lines are the 
-predicted values from the toy model in equation \ref{eq:vargal}.  We can 
+predicted values from the toy model in equation~\ref{eq:vargal}.  We can 
 see that the toy model slightly over-predicts the increase in variance, but is 
 still evidently useful for understanding how the effect scales with resolution. 
 For a given survey we can use this to predict the effect that coaddition will 
@@ -338,7 +338,9 @@ to be quite small, especially for galaxys.
 \includegraphics[width=0.45\textwidth]{toy-model.png}
 \caption{The ratio of the noise in the estimated flux when measured on a coadd 
 compared to an optimal combination of images when both the galaxy and PSF are Gaussian.
-The horizontal axis is the galaxy size, $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$,
+The horizontal axis is a dimensionless measure of the galaxy size compared to the total
+PSF-convolved object size, $R=\sigma_g^2/(\sigma_p^2 +
+\sigma_g^2)$, 
 where $\sigma_g$ is the galaxy size and $\sigma_p$ is the PSF size.
 The points are measured values from simulations, and the solid line is the exact 
 prediction from the equations in Appendix~\ref{Section:FluxSN}.  The dashed line shows 
@@ -644,7 +646,7 @@ decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 \includegraphics[width=\textwidth]{cell.png}
 \caption{
 {\it Left}: The fraction of visits that would need to be rejected from a patch for three 
-differnt patch sizes (0.1, 0.5 and 0.8 arcminutes) and the two dither patterns 
+different patch sizes (0.1, 0.5 and 0.8 arcminutes) and the two dither patterns 
 shown in Fig.~\ref{fig:dither}.  {\it Right}:  The corresponding distribution 
 of 5$\sigma$ depths for each patch.
 }
@@ -657,7 +659,7 @@ of 5$\sigma$ depths for each patch.
 \caption{
 The size distribution of blended objects as derived from the HSC 
 Ultra-Deep data.  The size is defined as the square root of the area of an
-objects bounding box.
+object's bounding box.
 }
 \label{fig:size}
 \end{figure}
