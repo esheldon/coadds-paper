@@ -61,14 +61,14 @@
 
 \title[The little coadd that could]{The little coadd that could:  Estimating shear from coadded images}
 
-\author[Armstrong et~al.]{Robert Armstrong$^1$,$^2$\thanks{\tt armstrong46@llnl.gov}, Erin Sheldon$^2$, Eric
+\author[Armstrong et~al.]{Robert Armstrong$^1$,$^4$\thanks{\tt armstrong46@llnl.gov}, Erin Sheldon$^2$, Eric
   Huff$^3$, Jim Bosch$^4$, Peter Melchior$^4$,
   \newauthor
   Rachel Mandelbaum$^5$, Robert Lupton$^4$
   \\$^1$Lawrence Livermore National Laboratory, Livermore, CA 94551, USA
   \\$^2$Brookhaven National Laboratory, Bldg. 510, Upton, NY 11973, USA 
   \\$^3$Jet Propulsion Laboratory, California Institute of Technology, 4800 Oak Grove Dr., Pasadena, CA 91109, USA
-  \\$^4$Princeton University, Princeton, NJ, U.S.A.
+  \\$^4$Department of Astrophysical Sciences, Princeton University, Princeton, NJ 08544, USA
   \\$^5$McWilliams Center for Cosmology, Department of Physics, Carnegie Mellon University, Pittsburgh, PA 15213, USA
 }
 
@@ -87,9 +87,9 @@ In this paper, we examine the possibility of doing shear measurements on
 coadded images directly.  We show on a set of simulations that the shear multiplicative
 bias can be constrained below the 0.1$\%$ level on coadded images.
 We see no degradation in performance between the multi-epoch and coadded approach for
-two independent shear codes: Metacalibration and BFD.  The one 
+two independent shear codes: \Mcal and BFD.  The one 
 caveat here, is the assumption that we have a principled
-coadd, i.e. the PSF is mathematically well-defined for all the input images.
+coadd, i.e., the PSF is mathematically well-defined.
 This requires us to remove images that overlap a CCD boundary.  We estimate 
 that the number of epochs that must be rejected for a survey like LSST is on the 
 order of $\sim 3\%$ for typical objects.
@@ -623,9 +623,10 @@ shows these values for three different patch sizes with side length 0.1, 0.5
 and 0.8 arcminutes. Given these patch sizes, the fraction of rejected visits 
 can vary from 3$\%$ to 20$\%$.  This emphasizes the fact that we must use small 
 patches to avoid losing many visits.  
+
 To connect this with observations we need to know the typical object size in 
 LSST.  In Fig.~\ref{fig:size}, we show the distribution of blend family sizes 
-from the HSC Ultra-Deep~\citep{SurveyOverview} data.  The HSC Ultra-Deep data is 
+from the HSC Ultra-Deep~\citep{HSC_DR1} data.  The HSC Ultra-Deep data is 
 a good match for LSST because it has a depth of $\sim 27.5$ which is comparable 
 to the wide field LSST depth.  Note that this is not the size of single 
 objects, but rather the size of objects that have been identified as coming 
