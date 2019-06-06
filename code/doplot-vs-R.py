@@ -24,8 +24,8 @@ def main():
     args = parser.parse_args()
 
     fs = args.files[0].split('-')
-    epsname = '-'.join(fs[0:3] + fs[4:])
-    epsname = epsname.replace('.fits','.eps')
+    pdfname = '-'.join(fs[0:3] + fs[4:])
+    pdfname = pdfname.replace('.fits','.pdf')
 
     num=len(args.files)
     Rvals=np.zeros(num)
@@ -84,8 +84,8 @@ def main():
     plt.add(pts, curve, c2)
 
     #plt.show()
-    print("writing:",epsname)
-    plt.write_eps(epsname)
+    print("writing:",pdfname)
+    plt.write(pdfname)
 
 
 main()
