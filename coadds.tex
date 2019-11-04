@@ -110,11 +110,21 @@ hundreds of exposures.  Having repeated visits helps to build up the required
 depth, fill-in chip gaps, and reject artifacts like cosmic rays.  Multiple 
 observations can also help reduce systematic uncertainties, especially if they 
 are taken on different parts of the camera and with different camera orientations.
-\rachel{While the start of the intro is generic, the above sentence and some later text in the intro
-seem more WL-specific.  Should we have a paragraph saying what weak lensing is and commenting on
-measurement needs (PSF estimation etc.) and systematics that can be a problem?}
-One question that remains to be 
-answered is, what is the optimal way to combine the information from these 
+
+One of the most powerful measurements of cosmic structure from these surveys involves measuring
+how galaxy images are distorted due to intervening matter.  This is known as weak lensing.
+Photons from distant galaxies will be deflected by massive structures along the sight causing
+a change in the shape, brightness and position.  The change in shape of nearby galaxies will 
+be correlated as they pass by the same structures.  This is a powerful probe of the both the
+expansion history and growth of structure in the universe.  Many past and on going surveys have
+utilized weak lensing to constrain cosmoligical parameters.
+For future measurements, the key problem will be to ensure that the systematic errors are under control.  
+These can come from both the shear measurement algorithm and the data itself.  
+Problems inherent in the data include correct characteriztion
+of the PSF, astrometry, detection and deblending along with other more subtle problems.  In this paper
+we will focus on how to combine measurements from the different observations we will recieve from future surveys.
+
+An still open question is, what is the optimal way to combine the information from these 
 distinct sets of observations?  Past and current surveys have taken approaches that can be
 classified 
 into three categories:
@@ -123,7 +133,7 @@ into three categories:
 take a weighted sum to construct a single coadded image.  Measurements are 
 performed on the coadd with no need to return to the individual images.
 \item \label{method:second} Perform measurements on each epoch separately.  
-Combine these measurements by taking a weighted average.  
+Combine these measurements at the catalog level by taking a weighted average.  
 \item \label{method:third} Create the coadd as in \ref{method:first}, but only 
 use it to detect objects.  With this information, go back to each of the 
 individual epochs and do a joint simultaneous measurement of all the images.
@@ -163,7 +173,7 @@ simultaneously. For a survey like LSST, where the number of epochs is an order
 of magnitude larger, it is likely that multi-epoch fitting will overwhelm the 
 computing budget.  Again, being able to instead work on a single coadd could 
 reduce a significant amount of the processing burden.  There may also be other 
-reasons to prefer working on the coadds.  When separating blended objects into 
+reasons to prefer working on the coadds.  For example, when separating blended objects into 
 their individual sources, there is limited information available on single 
 epochs.  The higher $S/N$ on the coadds makes this much easier.  
 
@@ -187,16 +197,22 @@ of LSST.
 \section{Coaddition}
 \label{Section:Coaddition}
 
-\rachel{It seems like we are missing an opportunity here to emphasize the need for algorithms that
-  result in a well-defined PSF.  Isn't that the real reason we don't want to use e.g. a median coadd
-rather than a weighted mean?  And why we want to weight by background, not background$+$signal, when
-taking the mean?  I feel like this is being assumed without being stated, and I think it's important
-to state this because some of the previous WL prejudice against coadds came from analyses with
-coadds that did not have a well-defined PSF.}
+The simplest means of combining images is to use a direct weighted mean, median or 
+clipped mean.  The median and clipped mean are frequently used to reject artifacts in the image.
+None of these are optimal in $S/N$ because they do not properly 
+account for variations in PSF sizes and background levels. A more important
+issue, however, is that not all of these methods construct a well-defined PSF.  
+The problem is that they assume pixel values that go into a particular coadd pixel are drawn from 
+a distribution that has the same mean.  This is not true when input images have different PSFs.
+Building a coadd with median or any amount of clipping 
+will typically result in the cores of brighter stars being clipped from the the 
+best seeing images, resulting in a flux-dependent (i.e. ill-defined) PSF.  While any non-linear
+statistic will have this problem, if the weight depends on the signal this will also result
+in a flux-dependent PSF and ill-defined PSF.  The only simple method to construct a valid
+PSF is to use a weighted mean where the mean only depends on the background.
 
-The simplest means of combining images is to use a median, weighted mean or 
-clipped mean.  None of these are optimal in $S/N$ because they do not properly 
-account for variations in PSF sizes and background levels.  For the majority of 
+
+For the majority of 
 detections, which are small faint objects, the epochs with the smallest seeing 
 will have the most information.  \cite{Kaiser2004} and \cite{Zackay2017} proposed 
 constructing an optimal coadd by stacking the image convolved with the PSF.  
@@ -240,7 +256,7 @@ interpolation kernel.  For typical observing patterns in HSC, the amount of
 variance lost to covariance is $\sim 10\%$.  The correlated noise pattern must be 
 taken into account to achieve the precision in weak lensing. \cite{Gurvich2016} 
 showed that ignoring such correlations results in errors of a few percent, well 
-above the requirements.  
+above the requirements of future surveys.  
 
 With a complete knowledge of the astrometric shifts and distortions, it is, in 
 principle, possible to construct the full pixel covariance for a given region.  
@@ -258,11 +274,9 @@ polynomial is used to describe the variation of the PSF across a CCD.  The
 challenge on a coadd is that the PSF is discontinuous across the edge 
 of a detector in any individual epoch.  Given this, it can be difficult to construct a 
 model on the coadd.  An alternative approach used by 
-\cite{Jee2016} and \cite{Mandelbaum2018} is to create a valid coadded PSF by resampling 
-and interpolating the single epoch PSFs in the same way as the images 
-\cite{DLS, HSC}.
-\rachel{May be more appropriate to cite the HSC pipeline paper rather than the shear catalog paper
-  in the previous sentence?}
+\cite{Jee2016} and \cite{Bosch2018} is to create a valid coadded PSF by resampling 
+and interpolating the single epoch PSFs in the same way as the images.
+
 This avoids any problems of having to spatially interpolate a 
 complex PSF model.  However, objects that include an epoch which crosses a 
 detector boundary will pose a problem, as the PSF is not be well defined.  For 
@@ -305,20 +319,14 @@ coadd to that from fitting the epochs simultaneously is approximately:
 \approx 1 + 2 \left( 1 - R \right)^2 \left( \frac{\Delta 
 \sigma_p}{\sigma_p} \right)^2,
 \end{align}
-where $\sigma_p$ is the PSF size,  \rachel{mean PSF size?} $\Delta \sigma_p$ is the RMS scatter in PSF
+where $\sigma_p$ is the mean PSF size, $\Delta \sigma_p$ is the RMS scatter in PSF
 size across the individual visits, and $R=\sigma_g^2/(\sigma_p^2 + \sigma_g^2)$ is the ratio of the galaxy
 size, $\sigma_g$, to the PSF size.  This result shows the increased variance is
 proportional to $1-R$ and the relative variation in PSF size
 $(\Delta \sigma_p/\sigma_p)^2$.  For a large galaxy $R$ is near unity and for a star
 $R$ is near zero, so as expected the effect is largest for stars.  In cases where there
 are significant PSF variations of order 1, the variance could be increased by a
-factor of 2--3 for star-like objects.  However, most current and future
-surveys have significantly less PSF variation than this, on the order of 0.1.
-\rachel{For what it's worth, if I take the Cerro Pachon seeing distribution from the LSST SRD, I
-  find mean seeing of 0.67 arcsec and standard deviation of 0.3, so $\Delta \sigma_p/\sigma_p \sim
-  0.45$.  Accounting for variation in zenith angle would presumably broaden this more.  I'm not sure
-this is so atypical, and it's closer geometrically to the original example you gave (1) than the one
-you say is typical (0.1).}
+factor of 2--3 for star-like objects.  
 
 We tested the validity of equation~\eqref{eq:vargal} using a simple Monte Carlo
 simulation.  We used the \galsim\ package \citep{GalSim} to generate images of Gaussian
@@ -375,42 +383,26 @@ To generate the galaxy population we use code from the \nnsim\ package\footnote{
 and \ngmix.  The generated galaxy images have the following properties:
 
 \begin{itemize}
-\item We generate single galaxy images on $48 \times 48$ postage stamps with no 
-neighbors.
+\setlength{\itemindent}{0in}
+\item We generate single galaxy images on $48 \times 48$ postage stamps with no neighbors.
 \item The pixel scale is the same as DES, 0.27 arcseconds/pixel.
-\item The pixel noise is uniform for each visit and is modeled as a zero-mean 
-Gaussian with $\sigma$ ranging from 0.5-0.6.
+\item The pixel noise is uniform for each visit and is modeled as a zero-mean Gaussian with $\sigma$ ranging from 0.5-0.6.
 \item We assume the PSF model is perfectly known.
 \item The PSF model is a Moffat with $\beta=3.5$.
-\item The \textsf{FWHM} of the PSF varies for each epoch as a Log-Normal 
-distribution with mean 0.95 and $\sigma=0.1$.  Values are truncated between 
-0.8 and 1.15.
-\item The PSF ellipticity is Gaussian with a mean of 0.0 and 0.01 for $e_1$ and 
-$e_2$ respectively, and $\sigma=0.01$.
+\item The \textsf{FWHM} of the PSF varies for each epoch as a LogNormal distribution with mean 0.95 and $\sigma=0.1$.  Values are truncated between 0.8 and 1.15.
+\item The PSF ellipticity is Gaussian with a mean of 0.0 and 0.01 for $e_1$ and $e_2$ respectively, and $\sigma=0.01$.
 \item The galaxy models are pure exponentials.  
-\item We sample from an empirical model for the flux and size based on 
-\textsf{COSMOS} data.  We used the \textsf{COSMOS} I$<$25.2 dataset packaged 
-along with the \galsim\ software to construct a kernel density estimator for the 
-size and flux.  For the bandwith of the estimator we use a kernel with 0.1$\times$ 
-the intrinsic data covariance.
-\item The intrinsic ellipticity is drawn from the distribution $P(e) \propto 
-  (-e^2)^2 \exp{(-e^2/2\sigma_e^2)}$ with $\sigma_e=0.02$, where $e$ is defined
-  as a shear.  The small width here is set to reduce the shape noise.
-\rachel{This is a slightly odd way to write the $P(e)$ and I am wondering if there is a typo?  (I'm
-  not sure why to write $(-e^2)^2$ instead of just $e^4$\dots)}
+\item We sample from an empirical model for the flux and size based on \textsf{COSMOS} data.  We used the \textsf{COSMOS} I$<$25.2 dataset packaged along with the \galsim\ software to construct a kernel density estimator for the size and flux.  For the bandwith of the estimator we use a kernel with 0.1$\times$ the intrinsic data covariance.
+\item The intrinsic ellipticity is drawn from the distribution $P(e) \propto e(1e^2)^2 \exp{(e^2/2\sigma_e^2)}$ with $\sigma_e=0.02$, where $e$ is defined as a shear.  The small width here is set to reduce the shape noise.
 \item We generate 10 epochs for each object.  
 \item Each visit has a random shift applied within a 0.5 pixel radius.
-\item The Jacobian values of the WCS for each exposure are allowed to vary for 
-each epoch.  The amount of variation is taken from values measured on DES.
+\item The Jacobian values of the WCS for each exposure are allowed to vary for each epoch.  The amount of variation is taken from values measured on DES.
 \item To resample the images we use a 3rd order Lanczos kernel.
-\item For coaddition, we compute a mean weighted by the inverse of the pixel 
-variance.
-\item We construct a coadded noise image, as described in 
-Section~\ref{Subsection:Registration}, by generating a single Monte Carlo realization 
-of the noise for each epoch and resampling and coadding them.
-\item The coadded PSF is constructed by resampling and coadding the individual 
-PSFs for each epoch.
+\item For coaddition, we compute a mean weighted by the inverse of the pixel variance.
+\item We construct a coadded noise image, as described in Section~\ref{Subsection:Registration}, by generating a single Monte Carlo realization of the noise for each epoch and resampling and coadding them.
+\item The coadded PSF is constructed by resampling and coadding the individual PSFs for each epoch.
 \item All galaxies are sheared by $g_1=0.02$.
+
 \end{itemize}
 
 The choice of using simplified galaxy models was employed solely to reduce the 
@@ -461,8 +453,9 @@ noise was reduced by a factor of 100.
 \item We divide the data into two different regimes: $S/N$ 5-25 and 25-50.  We 
 build a separate prior for each dataset.  For the higher range, we doubled 
 measured moment noise to increase the overlap with the number of deep galaxies.
-\rachel{I am not following this last sentence, specifically the ``we doubled measured moment noise''
-part - can you explain / rephrase?}
+This is to account for the fact that higher $S/N$ galaxies will have a smaller
+measurement error and therefore will overlap fewer templates.  See \cite{Bernstein2016}
+Section 2.5 for more details.
 \item A knowledge of the covariance matrix is currently necessary in order to 
 build the prior moment distribution.  Previous studies have shown that if the 
 noise varies more than $\sim$10\%, we need to divide the data into different 
@@ -537,13 +530,11 @@ operations.
 \label{Section:Results}
 
 \subsection{Shear bias} We ran the BFD and \mcal\ shear measurement codes on
-our simulations in both multi-epoch measurements and on the coadded images. For
-\mcal\ we made cuts that the object have \snr$ > 10$ and square size relative
+our simulations in both multi-epoch mode and on the coadded images. For
+\mcal\ we made consistent cuts on coadd and and multi-epoch that the object have \snr$ > 10$ and square size relative
 to the PSF of $T/T_{\mathrm{PSF}} > 0.5$.
-\rachel{Were those cuts made on the coadd and used consistently for the coadd vs. multi-epoch
-  measurements?} For BFD we made cuts XXX.
-\rachel{Flagging this missing info re: BFD cuts, in case this fell through the cracks.} We
-applied corrections for selection effects in both methods.  We summarize the
+  For BFD we made cuts of $5 < S/N < 50$ as described in \ref{Section:BFD} .
+We applied corrections for selection effects in both methods.  We summarize the
 results in table~\ref{tab:results}.  Each measurement was performed on
 independent simulations, so the errors are uncorrelated.  These results show
 that there is no additional bias in either shear method when measuring the
@@ -569,11 +560,8 @@ centered in the middle of the postage stamp.  If instead we offset the PSFs so
 that it was interpolated in the same way as the object images during
 coaddition, we found that the bias went away and we could use a lower order
 interpolation kernel.  This problem did not seem to effect the BFD method.
-This is likely because in BFD we were making the same error in the deep reference
+This is likely because for BFD we were making the same error in the deep reference
 set as in the shallow images, so this problem was being calibrated out.
-\rachel{Interesting.  This is kind of a side point for this paper but I'm curious to think through
-  what this mean in terms of the ability to self-calibrate some systematics using BFD (which ones
-  can be self-calibrated in this way because they affect the deep images).}
 
 \item We tested coadds created from original images that had large random
 rotations.  We found no additional bias, as long as the images were padded
@@ -636,21 +624,17 @@ The dots are restricted to within the blue hexagon for this study.
 
 To compute the number of missing exposures we might expect, we place 10,000 
 square patches of a particular size on the sky and calculate the number of 
-visits that have a CCD edge that will cross each patch.  We can also calculate 
-the reduced 5$\sigma$ point source depth for each patch.  Fig.~\ref{fig:cell} 
+r-band visits that have a CCD edge that will cross each patch.  We can also calculate 
+the reduced r-band 5$\sigma$ point source depth for each patch.  Fig.~\ref{fig:cell} 
 shows these values for three different patch sizes with side length 0.1, 0.5 
 and 0.8 arcminutes. Given these patch sizes, the fraction of rejected visits 
 can vary from 3$\%$ to 20$\%$.  This emphasizes the fact that we must use small 
-patches to avoid losing many visits.  \rachel{This figure shows the 5-sigma point source depth in
-  which band?  I'm trying to figure out what numbers to compare it to.}
+patches to avoid losing many visits.  
 To connect this with observations we need to know the typical object size in 
 LSST.  In Fig.~\ref{fig:size}, we show the distribution of blend family sizes 
-from the HSC Ultra-Deep~\citep{SurveyOverview} data.  The HSC Ultra-Deep data is 
-a good match for LSST because it has a depth of $\sim 27.5$ which is comparable 
-to the wide field LSST depth.
-\rachel{Is this statement specific to the Ultra-Deep data in PDR1?  My expectation is that when the
-  HSC survey is complete, HSC UD will be significantly deeper than LSST Wide, while HSC Deep will be
-comparable to LSST Wide.  But that might not be true in the first data release?}
+from the HSC Ultra-Deep~\citep{SurveyOverview} data.  The HSC Ultra-Deep data from this release
+ is a good match for LSST as it has a depth of $\sim 27.5$ comparable to the wide field LSST depth.
+
 Note that this is not the size of single 
 objects, but rather the size of objects that have been identified as coming 
 from the same blend.  A blend is defined as objects that have been combined 
@@ -670,11 +654,7 @@ decrease in $S/N$ by rejecting visits that cross a CCD boundary.
 {\it Left}: The fraction of visits that would need to be rejected from a patch for three 
 different patch sizes (0.1, 0.5 and 0.8 arcminutes) and the two dither patterns 
 shown in Fig.~\ref{fig:dither}.  {\it Right}:  The corresponding distribution 
-of 5$\sigma$ depths for each patch. \rachel{Legend should have arcmin symbol rather than single
-  quote mark. Also, I suggest switching to a color blind-friendly color
-  palette, like seaborn ``colorblind'' (https://seaborn.pydata.org/tutorial/color\_palettes.html) or
-https://jiffyclub.github.io/palettable/tableau/\#colorblind\_10}
-}
+of 5$\sigma$ depths for each patch. }
 \label{fig:cell}
 \end{figure*}
 
@@ -725,33 +705,29 @@ separate coadd.  These regions of interest must be relatively small to avoid
 rejecting too many exposures.  We examined the typical size of blended regions
 from the HSC Ultra-Deep field and found that the number of visits we would
 reject for a survey like LSST is $< 5\%$.  This results in only a minor loss in
-effective survey depth.  It is not clear, however, that a multi-epoch fitting
+effective survey depth.  Furthermore, it is not clear that a multi-epoch fitting
 algorithm could fully use these rejected visits as there can be numerous
 problems in modeling these galaxies on the edge of a CCD.
 
-\rachel{Is there some comment we can make on potential computational obstacles / costs associated
-  with a ``per-object coadd'' or ``coadds in cells'' approach, compared to the approaches that have
-  been discussed more extensively? (i.e., coadds that are not per object / not in cells;
-  multi-fitting)  I think this would be a useful addition to the final section of the paper.}
+This work is especially relevant for surveys with many exposures like LSST.  Multi-epoch fitting 
+will dominate the compute resources for such a survey and therefore anything that can alleviate that will
+be extremely helpful.  We have shown that the computational cost
+for estimation shear can be significantly reduced by using using coadded images instead of the more
+accepted multi-epoch fitting approach.
 
-XXX Given the shear-dependent detection bias I've recently discovered, it is
-likely we will need larger ``coadds in cells'', which will necessarily involve
-removing more images.  For Y10 LSST is it possibly these edges are less important?
-
-\rachel{Is there a punch line so we can end on a high note?  Here's my attempt at one, for what it's
-worth: ``The weak lensing literature includes studies that take a wide variety of approaches to shear
+The weak lensing literature includes studies that take a wide variety of approaches to shear
 inference in multi-epoch data.  In this work, we have sought to place the choice of approach on a firmer
 foundation (at least for Nyquist-sampled ground-based images) by exploring issues of shear bias,
 statistical uncertainty, and the handling of objects near the boundaries of detectors in detail.
 While some implementation details related to an understanding of the correlated noise fields were
 deferred to future work, our results suggest that current and future ground-based weak lensing
 studies that adopt a principled coaddition method of the sort described in this work may be
-well-justified in the use of coadds for shear inference.''  Feel free to use/modify/discard as you
-wish!}
+well-justified in the use of coadds for shear inference.
 
 \section*{Acknowledgments}
 
-\rachel{Funding and other acknowledgments here?}
+
+This  material  is  based  upon  work  supported  in  part  by  the  National  Science  Foundation  through  Cooperative Agreement 1258333 managed by the Association of Universities for Research in Astronomy (AURA), and the Department of Energy under Contract  No.  DE-AC02-76SF00515 with the SLAC National Accelerator  Laboratory.      Additional  LSST funding  comes  from  private  donations,  grants  to  universities,  and in-kind support from LSSTC Institutional Members.
 
 RM is supported by the US Department of Energy Cosmic Frontier program, grant DE-SC0010118.
 
